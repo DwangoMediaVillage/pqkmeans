@@ -1,12 +1,10 @@
 #include <boost/python.hpp>
-#include <boost/python/numeric.hpp>
 
-#include <iostream>
-void hello() {
-    std::cout << "hello" << std::endl;
-}
+#include "encoder/encoder_sample.h"
 
 BOOST_PYTHON_MODULE (_pqkmeans) {
     using namespace boost::python;
-    def("hello", hello);
+    class_<EncoderSample>("EncoderSample")
+            .def("fit_generator", &EncoderSample::fit_generator)
+            .def("transform_one", &EncoderSample::transform_one);
 }
