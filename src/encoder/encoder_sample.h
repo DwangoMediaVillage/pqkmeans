@@ -7,15 +7,13 @@
 
 class EncoderSample {
 private:
-    std::vector<boost::python::object> index_dict;
+    std::vector<boost::python::list> index_dict;
 public:
     void fit_generator(boost::python::object iterator);
 
     boost::python::list transform_one(boost::python::list vector);
 
-    void inverse_transform(boost::python::object iterator);
-
+    boost::python::list inverse_transform_one(boost::python::list vector);
 };
-
 
 #endif //PROJECT_ENCODER_SAMPLE_H

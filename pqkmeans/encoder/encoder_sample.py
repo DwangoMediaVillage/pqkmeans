@@ -15,6 +15,13 @@ class EncoderSample(sklearn.base.BaseEstimator):
     def transform(self, x_test):
         return list(self.transform_generator(x_test))
 
+    def inverse_transform(self, x_test):
+        return list(self.inverse_transform_generator(x_test))
+
     def transform_generator(self, x_test):
         for vector in x_test:
             yield self._impl.transform_one(vector)
+
+    def inverse_transform_generator(self, x_test):
+        for vector in x_test:
+            yield self._impl.inverse_transform_one(vector)
