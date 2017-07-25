@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.6)
+# please use the comaptible version of cmake according to the version of your boost library
+
 set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 set(CMAKE_CXX_STANDARD 11)
 
