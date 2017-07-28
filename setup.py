@@ -61,22 +61,6 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
-# setup(
-#     name='pqkmeans',
-#     version='0.0.1',
-#     description='PQk-means',
-#     author='Yusuke MATSUI, Keisuke OGAKI',
-#     author_email='matsui@nii.ac.jp, keisuke_ogaki@dwango.co.jp',
-#     url='',
-#     packages=find_packages('.'),
-#     data_files=[(".", ["_pqkmeans.so"])],
-#     include_package_data=True,
-#     install_requires=[],
-#     test_suite='tests',
-#     entry_points='',
-#     zip_safe=False
-# )
-
 setup(
     name='pqkmeans',
     version='0.0.1',
