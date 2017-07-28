@@ -2,18 +2,21 @@
 #define PROJECT_ENCODER_SAMPLE_H
 
 
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <vector>
+
+namespace py = pybind11;
 
 class EncoderSample {
 private:
-    std::vector<boost::python::list> index_dict;
+    std::vector<std::vector<float>> index_dict;
 public:
-    void fit_generator(boost::python::object iterator);
+    void fit_generator(py::iterator iterator);
 
-    boost::python::list transform_one(boost::python::list vector);
+    std::vector<long> transform_one(std::vector<float> pyvector);
 
-    boost::python::list inverse_transform_one(boost::python::list vector);
+    std::vector<float> inverse_transform_one(std::vector<long> vector);
 };
 
 #endif //PROJECT_ENCODER_SAMPLE_H

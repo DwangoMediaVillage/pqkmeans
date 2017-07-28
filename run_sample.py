@@ -2,7 +2,7 @@ import pqkmeans
 
 
 def data_source():
-    return ([i*100] for i in range(10) for _ in range(3))
+    return ([float(i*100)] for i in range(10) for _ in range(3))
 
 
 e = pqkmeans.encoder.EncoderSample()
