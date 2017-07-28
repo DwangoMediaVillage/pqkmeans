@@ -84,7 +84,7 @@ setup(
     author_email='',
     description='',
     long_description='',
-    # packages=find_packages('.'),
+    packages=["pqkmeans"],
     ext_modules=[CMakeExtension('_pqkmeans')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
