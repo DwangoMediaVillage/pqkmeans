@@ -71,6 +71,6 @@ setup(
     packages=["pqkmeans"],
     ext_modules=[CMakeExtension('_pqkmeans')],
     cmdclass=dict(build_ext=CMakeBuild),
-    test_suite = 'test.first_test.suite',
+    test_suite = 'test',
     zip_safe=False,
 )
