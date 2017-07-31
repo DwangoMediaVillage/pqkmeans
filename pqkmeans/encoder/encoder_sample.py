@@ -8,7 +8,7 @@ class EncoderSample(sklearn.base.BaseEstimator):
     def __init__(self):
         self._impl = _pqkmeans.EncoderSample()
 
-    def fit_generator(self, x_train: typing.Generator[typing.Iterable[float]]):
+    def fit_generator(self, x_train: typing.Iterable[typing.Iterable[float]]):
         self._impl.fit_generator(x_train)
 
     def fit(self, x_train: numpy.array):
