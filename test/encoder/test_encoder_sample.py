@@ -2,6 +2,7 @@
 import unittest
 import pqkmeans
 import numpy
+import pipe
 
 
 class TestEncoderSample(unittest.TestCase):
@@ -15,7 +16,6 @@ class TestEncoderSample(unittest.TestCase):
 
     def test_fit_and_predict_generator(self):
         self.encoder.fit_generator(self.data_source(20))
-
         # can handle infinite list
         inf = 1000000000
         for i, original, encoded, decoded in zip(
