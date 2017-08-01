@@ -2,9 +2,10 @@ import sklearn
 import _pqkmeans
 import numpy
 import typing
+from .encoder_base import EncoderBase
 
 
-class EncoderSample(sklearn.base.BaseEstimator):
+class EncoderSample(EncoderBase):
     def __init__(self):
         self._impl = _pqkmeans.EncoderSample()
 
