@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import unittest
 import pqkmeans
+import numpy
 
 
 class TestEncoderSample(unittest.TestCase):
@@ -26,3 +27,10 @@ class TestEncoderSample(unittest.TestCase):
             self.assertEqual(original[0], decoded[0])
             if i == 10:
                 break
+
+    def test_fit_and_predict_array(self):
+        input_array = numpy.random.random((3,10))
+        self.encoder.fit(input_array)
+        encoded = self.encoder.transform(input_array)
+        decoded = self.encoder.inverse_transform(encoded)
+        numpy.testing.assert_array_almost_equal(input_array, decoded)
