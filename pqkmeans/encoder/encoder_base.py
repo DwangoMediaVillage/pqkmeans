@@ -1,7 +1,6 @@
 import numpy
 import sklearn
 import typing
-import numpy
 
 class EncoderBase(sklearn.base.BaseEstimator):
     def fit_generator(self, x_train: typing.Iterable[typing.Iterable[float]]):
