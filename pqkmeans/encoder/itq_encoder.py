@@ -24,7 +24,6 @@ class ITQEncoder(EncoderBase):
         self.iteration = iteration
         self.num_bit = num_bit
         self.trained_encoder = None  # type: ITQEncoder.TrainedITQEncoder
-        self.encode_buffer = 10000
 
     def __preprocess(self, data, bits):
         pca = sklearn.decomposition.PCA(n_components=bits)
@@ -67,23 +66,9 @@ class ITQEncoder(EncoderBase):
         R = self.__fit(data_preprocessed, self.num_bit, self.iteration)
         self.trained_encoder = self.TrainedITQEncoder(R, pca, self.num_bit)
 
-    def buffered_process(self, x_input: typing.Iterable[typing.Iterator[float]], process):
-        buffer = []
-        for input_vector in x_input:
-            buffer.append(input_vector)
-            if len(buffer) == self.encode_buffer:
-                encoded = process(buffer)
-                for encoded_vec in encoded:
-                    yield encoded_vec
-                buffer = []
-        if len(buffer) > 0:  # rest
-            encoded = process(buffer)
-            for encoded_vec in encoded:
-                yield encoded_vec
-
     def transform_generator(self, x_test: typing.Iterable[typing.Iterator[float]]):
         assert self.trained_encoder is not None, "This ITQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using this method."
-        return self.buffered_process(x_test, self.trained_encoder.encode_multi)
+        return self._buffered_process(x_test, self.trained_encoder.encode_multi)
 
     def inverse_transform_generator(self, x_test: typing.Iterable[typing.Iterator[int]]):
         raise ("cannot decode binary to original with ITQ")
