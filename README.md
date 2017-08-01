@@ -30,3 +30,11 @@ python setup.py develop
 ```
 python run_sample.py
 ```
+
+
+Test
+------------------------
+
+```
+python setup.py test
+```
