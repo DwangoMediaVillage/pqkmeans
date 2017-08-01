@@ -1,6 +1,4 @@
-import sklearn
 import _pqkmeans
-import numpy
 import typing
 from .encoder_base import EncoderBase
 
@@ -11,15 +9,6 @@ class EncoderSample(EncoderBase):
 
     def fit_generator(self, x_train: typing.Iterable[typing.Iterable[float]]):
         self._impl.fit_generator(x_train)
-
-    def fit(self, x_train: numpy.array):
-        self.fit_generator(x_train)
-
-    def transform(self, x_test: numpy.array):
-        return list(self.transform_generator(x_test))
-
-    def inverse_transform(self, x_test: numpy.array):
-        return list(self.inverse_transform_generator(x_test))
 
     def transform_generator(self, x_test: typing.Iterable[typing.Iterator[float]]):
         for vector in x_test:
