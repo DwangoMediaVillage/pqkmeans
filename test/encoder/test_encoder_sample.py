@@ -32,5 +32,6 @@ class TestEncoderSample(unittest.TestCase):
         input_array = numpy.random.random((3,10))
         self.encoder.fit(input_array)
         encoded = self.encoder.transform(input_array)
+        self.assertEqual(input_array.shape[0], encoded.shape[0])
         decoded = self.encoder.inverse_transform(encoded)
         numpy.testing.assert_array_almost_equal(input_array, decoded)
