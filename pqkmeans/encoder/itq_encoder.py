@@ -13,16 +13,12 @@ class ITQEncoder(EncoderBase):
         def encode(self, vector):
             vector_pca = self.pca.transform(vector)
             vector_projection = vector_pca.dot(self.R)
-            vector_bin = numpy.ones(self.bits, dtype=int)
-            vector_bin[vector_projection < 0] = 0
-            return vector_bin
+            return vector_projection >= 0
 
         def encode_multi(self, data_matrix):
             data_matrix_pca = self.pca.transform(data_matrix)
             data_matrix_projection = data_matrix_pca.dot(self.R)
-            data_matrix_bin = numpy.ones(data_matrix_projection.shape, dtype=int)
-            data_matrix_bin[data_matrix_projection < 0] = 0
-            return data_matrix_bin
+            return data_matrix_projection >= 0
 
     def __init__(self, iteration: int = 50, num_bit: int = 32):
         self.iteration = iteration

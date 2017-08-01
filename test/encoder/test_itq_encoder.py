@@ -10,7 +10,7 @@ class TestITQEncoder(unittest.TestCase):
                 yield [i * 100] * 5
 
     def setUp(self):
-        self.encoder = pqkmeans.encoder.ITQEncoder(num_bit=1)
+        self.encoder = pqkmeans.encoder.ITQEncoder(num_bit=3)
 
     def test_just_train_array(self):
         input_array = numpy.random.random((60, 10))
