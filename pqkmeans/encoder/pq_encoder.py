@@ -20,7 +20,7 @@ class PQEncoder(EncoderBase):
 
             codes = numpy.empty((N, self.M), dtype=self.ctype)
             for m in range(self.M):
-                codes[:, m], _ = vq(data_matrix[:, m * self.Ds: (m+1) * self.Ds], self.codewords[m])
+                codes[:, m], _ = vq(data_matrix[:, m * self.Ds : (m+1) * self.Ds], self.codewords[m])
             return codes
 
         def decode_multi(self, codes):
@@ -31,9 +31,9 @@ class PQEncoder(EncoderBase):
             assert M == self.M
             assert codes.dtype == self.ctype
 
-            decoded = numpy.empty((N, self.Ds * M), dtype=numpy.float)
-            for m in range(M):
-                decoded[:, m * self.Ds: (m+1) * self.Ds] = self.codewords[m][codes[:, m], :]
+            decoded = numpy.empty((N, self.Ds * self.M), dtype=numpy.float)
+            for m in range(self.M):
+                decoded[:, m * self.Ds : (m+1) * self.Ds] = self.codewords[m][codes[:, m], :]
             return decoded
 
     def __init__(self, num_bit: int = 32, Ks: int = 256):
