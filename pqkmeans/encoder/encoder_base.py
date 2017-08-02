@@ -23,3 +23,17 @@ class EncoderBase(sklearn.base.BaseEstimator):
     def inverse_transform(self, x_test: numpy.array):
         assert len(x_test.shape) == 2
         return numpy.array(list(self.inverse_transform_generator(x_test)))
+
+    def _buffered_process(self, x_input: typing.Iterable[typing.Iterator[float]], process, buffer_size: int = 10000):
+        buffer = []
+        for input_vector in x_input:
+            buffer.append(input_vector)
+            if len(buffer) == buffer_size:
+                encoded = process(buffer)
+                for encoded_vec in encoded:
+                    yield encoded_vec
+                buffer = []
+        if len(buffer) > 0:  # rest
+            encoded = process(buffer)
+            for encoded_vec in encoded:
+                yield encoded_vec
