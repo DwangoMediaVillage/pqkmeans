@@ -9,34 +9,32 @@ class PQEncoder(EncoderBase):
     class TrainedPQEncoder(object):
         def __init__(self, codewords: numpy.array, ctype: type):
             self.codewords, self.ctype = codewords, ctype
+            self.M, _, self.Ds = codewords.shape
 
         def encode_multi(self, data_matrix):
             # Is this OK? This expands an input generator to the matrix
             data_matrix = numpy.array(data_matrix)
 
             N, D = data_matrix.shape
-            M, _, Ds = self.codewords.shape
-            assert Ds * M == D, "input dimension must be Ds * M"
+            assert self.Ds * self.M == D, "input dimension must be Ds * M"
 
-            codes = numpy.empty((N, M), dtype=self.ctype)
-            for m in range(M):
-                data_matrix_sub = data_matrix[:, m * Ds: (m+1) * Ds]
-                codes[:, m], _ = vq(data_matrix_sub, self.codewords[m])
+            codes = numpy.empty((N, self.M), dtype=self.ctype)
+            for m in range(self.M):
+                codes[:, m], _ = vq(data_matrix[:, m * self.Ds: (m+1) * self.Ds], self.codewords[m])
             return codes
 
         def decode_multi(self, codes):
             # Is this OK? This expands an input generator to the matrix
             codes = numpy.array(codes)
 
-            N, _M = codes.shape
-            M, _, Ds = self.codewords.shape
-            assert M == _M
+            N, M = codes.shape
+            assert M == self.M
             assert codes.dtype == self.ctype
 
-            data_matrix = numpy.empty((N, Ds * M), dtype=numpy.float)
+            decoded = numpy.empty((N, self.Ds * M), dtype=numpy.float)
             for m in range(M):
-                data_matrix[:, m * Ds: (m+1) * Ds] = self.codewords[m][codes[:, m], :]
-            return data_matrix
+                decoded[:, m * self.Ds: (m+1) * self.Ds] = self.codewords[m][codes[:, m], :]
+            return decoded
 
     def __init__(self, num_bit: int = 32, Ks: int = 256):
         assert num_bit % 8 == 0, "num_bit must be dividable by 8"
