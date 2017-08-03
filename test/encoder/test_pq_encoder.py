@@ -39,4 +39,4 @@ class TestPQEncoder(unittest.TestCase):
         self.assertEqual(N1, N2)
         self.assertEqual(M, self.encoder.M)
         self.assertEqual(D, self.encoder.Ds * self.encoder.M)
-        self.assertEqual(encoded.dtype, self.encoder.ctype)
+        self.assertEqual(encoded.dtype, self.encoder.code_dtype)

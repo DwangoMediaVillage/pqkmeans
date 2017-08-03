@@ -7,39 +7,36 @@ from .encoder_base import EncoderBase
 
 class PQEncoder(EncoderBase):
     class TrainedPQEncoder(object):
-        def __init__(self, codewords: numpy.array, ctype: type):
-            self.codewords, self.ctype = codewords, ctype
+        def __init__(self, codewords: numpy.array, code_dtype: type):
+            self.codewords, self.code_dtype = codewords, code_dtype
             self.M, _, self.Ds = codewords.shape
 
         def encode_multi(self, data_matrix):
-            # Is this OK? This expands an input generator to the matrix
             data_matrix = numpy.array(data_matrix)
-
             N, D = data_matrix.shape
             assert self.Ds * self.M == D, "input dimension must be Ds * M"
 
-            codes = numpy.empty((N, self.M), dtype=self.ctype)
+            codes = numpy.empty((N, self.M), dtype=self.code_dtype)
             for m in range(self.M):
                 codes[:, m], _ = vq(data_matrix[:, m * self.Ds : (m+1) * self.Ds], self.codewords[m])
             return codes
 
         def decode_multi(self, codes):
-            # Is this OK? This expands an input generator to the matrix
             codes = numpy.array(codes)
-
             N, M = codes.shape
             assert M == self.M
-            assert codes.dtype == self.ctype
+            assert codes.dtype == self.code_dtype
 
             decoded = numpy.empty((N, self.Ds * self.M), dtype=numpy.float)
             for m in range(self.M):
                 decoded[:, m * self.Ds : (m+1) * self.Ds] = self.codewords[m][codes[:, m], :]
             return decoded
 
-    def __init__(self, num_bit: int = 32, Ks: int = 256):
+    def __init__(self, iteration: int = 20, num_bit: int = 32, Ks: int = 256):
         assert num_bit % 8 == 0, "num_bit must be dividable by 8"
+        self.iteration = iteration
         self.M, self.Ks, self.Ds = int(num_bit / 8), Ks, None
-        self.ctype = numpy.uint8 if Ks <= 2**8 else (numpy.uint16 if Ks <= 2**16 else numpy.uint32)
+        self.code_dtype = numpy.uint8 if Ks <= 2 ** 8 else (numpy.uint16 if Ks <= 2 ** 16 else numpy.uint32)
         self.trained_encoder = None  # type: PQEncoder.TrainedPQEncoder
 
     def fit(self, x_train: numpy.array):
@@ -52,8 +49,8 @@ class PQEncoder(EncoderBase):
         codewords = numpy.zeros((self.M, self.Ks, self.Ds), dtype=numpy.float)
         for m in range(self.M):
             x_train_sub = x_train[:, m * self.Ds : (m+1) * self.Ds].astype(numpy.float)
-            codewords[m], _ = kmeans2(x_train_sub, self.Ks, iter=20, minit='points')
-        self.trained_encoder = self.TrainedPQEncoder(codewords, self.ctype)
+            codewords[m], _ = kmeans2(x_train_sub, self.Ks, iter=self.iteration, minit='points')
+        self.trained_encoder = self.TrainedPQEncoder(codewords, self.code_dtype)
 
     def transform_generator(self, x_test: typing.Iterable[typing.Iterator[float]]):
         assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using thie method."
