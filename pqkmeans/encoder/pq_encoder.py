@@ -32,10 +32,10 @@ class PQEncoder(EncoderBase):
                 decoded[:, m * self.Ds : (m+1) * self.Ds] = self.codewords[m][codes[:, m], :]
             return decoded
 
-    def __init__(self, iteration: int = 20, num_bit: int = 32, Ks: int = 256):
-        assert num_bit % 8 == 0, "num_bit must be dividable by 8"
+    def __init__(self, iteration: int = 20, num_dim: int = 4, Ks: int = 256):
+        assert Ks <= 2 ** 32
         self.iteration = iteration
-        self.M, self.Ks, self.Ds = int(num_bit / 8), Ks, None
+        self.M, self.Ks, self.Ds = num_dim, Ks, None
         self.code_dtype = numpy.uint8 if Ks <= 2 ** 8 else (numpy.uint16 if Ks <= 2 ** 16 else numpy.uint32)
         self.trained_encoder = None  # type: PQEncoder.TrainedPQEncoder
 
