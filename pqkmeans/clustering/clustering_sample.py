@@ -7,7 +7,7 @@ class ClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin
     def __init__(self):
         self.min_vec = None
         self.max_vec = None
-        self.ones = None # decision boundary
+        self.ones = None  # decision boundary
 
     def distance(self, x, y):
         x_projected = self.ones.dot(x)
@@ -27,7 +27,7 @@ class ClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin
             if self.ones.dot(vec) > self.ones.dot(self.max_vec):
                 self.max_vec = vec
 
-    def transform_generator(self, x_test: typing.Iterable[typing.Iterator[float]]):
+    def transform_generator(self, x_test: typing.Iterable[typing.Iterable[float]]):
         for vec in x_test:
             if self.distance(vec, self.min_vec) < self.distance(vec, self.max_vec):
                 yield 0
@@ -36,7 +36,7 @@ class ClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin
 
     def fit(self, x_train: numpy.array):
         assert len(x_train.shape) == 2
-        self.fit_generator(iter(x_train))
+        self.fit_generator(x_train)
 
     def transform(self, x_test: numpy.array):
         assert len(x_test.shape) == 2
