@@ -35,11 +35,5 @@ class TestNativeClusteringSample(unittest.TestCase):
         # sample from each cluster
         counts = [0, 0]
         for vec, label in zip(source, encoded):
-            counts[label] += 1
-            if label == 0:
-                self.assertLessEqual(self.clustering.distance(vec, self.clustering.min_vec),
-                                     self.clustering.distance(vec, self.clustering.max_vec))
-            else:
-                self.assertLessEqual(self.clustering.distance(vec, self.clustering.max_vec),
-                                     self.clustering.distance(vec, self.clustering.min_vec))
+            counts[int(label[0])] += 1
         self.assertEqual(counts[0], counts[1])
