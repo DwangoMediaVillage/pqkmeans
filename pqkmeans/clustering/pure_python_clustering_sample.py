@@ -3,7 +3,7 @@ import sklearn
 import numpy
 
 
-class ClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin, sklearn.base.ClusterMixin):
+class PurePythonClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin, sklearn.base.ClusterMixin):
     def __init__(self):
         self.min_vec = None
         self.max_vec = None

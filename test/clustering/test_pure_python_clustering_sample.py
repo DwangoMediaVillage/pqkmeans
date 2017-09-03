@@ -4,14 +4,14 @@ import numpy
 import pipe
 
 
-class TestClusteringSample(unittest.TestCase):
+class TestPurePythonClusteringSample(unittest.TestCase):
     def data_source(self, n: int):
         for i in range(n):
             for _ in range(3):
                 yield [i * 100] * 5
 
     def setUp(self):
-        self.clustering = pqkmeans.clustering.ClusteringSample()
+        self.clustering = pqkmeans.clustering.PurePythonClusteringSample()
 
     def test_just_train_array(self):
         input_array = numpy.random.random((60, 10))
