@@ -2,6 +2,7 @@
 
 #include "encoder/encoder_sample.h"
 #include "clustering/cpp_implemented_clustering_sample.h"
+#include "clustering/bkmeans.h"
 
 namespace py = pybind11;
 
@@ -13,6 +14,11 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def("inverse_transform_one", &EncoderSample::inverse_transform_one);
 
     py::class_<CppImplementedClusteringSample>(m, "CppImplementedClusteringSample")
+            .def(py::init<>())
+            .def("fit_one", &CppImplementedClusteringSample::fit_one)
+            .def("predict_one", &CppImplementedClusteringSample::predict_one);
+
+    py::class_<BKMeans>(m, "BKMeans")
             .def(py::init<>())
             .def("fit_one", &CppImplementedClusteringSample::fit_one)
             .def("predict_one", &CppImplementedClusteringSample::predict_one);
