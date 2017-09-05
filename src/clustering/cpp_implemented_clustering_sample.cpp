@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <numeric>
-#include "native_clustering_sample.h"
+#include "cpp_implemented_clustering_sample.h"
 
 
 double l2distance(std::vector<float> x, std::vector<float> y) {
@@ -19,7 +19,7 @@ double calc_score(std::vector<float> x) {
 }
 
 
-void  NativeClusteringSample::fit_one(std::vector<float> pyvector) {
+void  CppImplementedClusteringSample::fit_one(std::vector<float> pyvector) {
     if (this->min_vec.size() == 0) {
         this->min_vec = pyvector;
     }
@@ -36,7 +36,7 @@ void  NativeClusteringSample::fit_one(std::vector<float> pyvector) {
     }
 }
 
-std::vector<float> NativeClusteringSample::transform_one(std::vector<float> pyvector) {
+std::vector<float> CppImplementedClusteringSample::transform_one(std::vector<float> pyvector) {
     std::vector<float> result = {0};
     if (l2distance(pyvector, this->min_vec) < l2distance(pyvector, this->max_vec)) {
         result[0] = 0;

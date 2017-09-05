@@ -6,7 +6,7 @@
 #include <cassert>
 #include <vector>
 
-class NativeClusteringSample {
+class CppImplementedClusteringSample {
 private:
     std::vector<float> min_vec;
     std::vector<float> max_vec;

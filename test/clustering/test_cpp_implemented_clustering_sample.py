@@ -4,9 +4,9 @@ import numpy
 import pipe
 
 
-class TestNativeClusteringSample(unittest.TestCase):
+class TestCppImplementedClusteringSample(unittest.TestCase):
     def setUp(self):
-        self.clustering = pqkmeans.clustering.NativeClusteringSample()
+        self.clustering = pqkmeans.clustering.CppImplementedClusteringSample()
 
     def data_source(self, n: int):
         for i in range(n):

@@ -1,2 +1,2 @@
 from .pure_python_clustering_sample import *
-from .native_clustering_sample import NativeClusteringSample
+from .cpp_implemented_clustering_sample import CppImplementedClusteringSample

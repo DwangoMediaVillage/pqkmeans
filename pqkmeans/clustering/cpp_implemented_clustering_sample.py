@@ -5,10 +5,10 @@ import sklearn
 import _pqkmeans
 
 
-class NativeClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin, sklearn.base.ClusterMixin):
+class CppImplementedClusteringSample(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin, sklearn.base.ClusterMixin):
     def __init__(self):
         super().__init__()
-        self._impl = _pqkmeans.NativeClusteringSample()
+        self._impl = _pqkmeans.CppImplementedClusteringSample()
 
     def fit_generator(self, x_train: typing.Iterable[typing.Iterable[float]]):
         for vec in x_train:
