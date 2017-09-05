@@ -5,9 +5,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(_pqkmeans) {
-    py::module m("_pqkemeans", "internal module for PQk-means");
-
+PYBIND11_MODULE(_pqkmeans, m) {
     py::class_<EncoderSample>(m, "EncoderSample")
             .def(py::init<>())
             .def("fit_generator", &EncoderSample::fit_generator)
@@ -18,6 +16,4 @@ PYBIND11_PLUGIN(_pqkmeans) {
             .def(py::init<>())
             .def("fit_one", &CppImplementedClusteringSample::fit_one)
             .def("predict_one", &CppImplementedClusteringSample::predict_one);
-
-    return m.ptr();
 }
