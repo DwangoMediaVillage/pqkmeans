@@ -11,8 +11,8 @@ private:
     std::vector<float> min_vec;
     std::vector<float> max_vec;
 public:
-    void fit_one(std::vector<float> pyvector);
-    std::vector<float> transform_one(std::vector<float> pyvector);
+    void fit_one(const std::vector<float> pyvector);
+    std::vector<float> transform_one(const std::vector<float> pyvector);
 };
 
 
