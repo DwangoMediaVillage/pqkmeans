@@ -14,7 +14,7 @@ void EncoderSample::fit_generator(py::iterator iterator) {
     }
 }
 
-std::vector<long> EncoderSample::transform_one(const std::vector<float> vector) {
+std::vector<long> EncoderSample::transform_one(const std::vector<float>& vector) {
     auto found = std::find(index_dict.begin(), index_dict.end(), vector);
     if (found != index_dict.end()) {
         std::vector<long> ret_vector;
@@ -25,7 +25,7 @@ std::vector<long> EncoderSample::transform_one(const std::vector<float> vector) 
     }
 }
 
-std::vector<float> EncoderSample::inverse_transform_one(const std::vector<long> vector) {
+std::vector<float> EncoderSample::inverse_transform_one(const std::vector<long>& vector) {
     long value = vector[0];
     if (value < index_dict.size()) {
         return index_dict[value];

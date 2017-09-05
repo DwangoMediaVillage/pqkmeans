@@ -19,7 +19,7 @@ double calc_score(const std::vector<float> x) {
 }
 
 
-void  CppImplementedClusteringSample::fit_one(const std::vector<float> pyvector) {
+void  CppImplementedClusteringSample::fit_one(const std::vector<float>& pyvector) {
     if (this->min_vec.size() == 0) {
         this->min_vec = pyvector;
     }
@@ -36,7 +36,7 @@ void  CppImplementedClusteringSample::fit_one(const std::vector<float> pyvector)
     }
 }
 
-int CppImplementedClusteringSample::predict_one(const std::vector<float> pyvector) {
+int CppImplementedClusteringSample::predict_one(const std::vector<float>& pyvector) {
     if (l2distance(pyvector, this->min_vec) < l2distance(pyvector, this->max_vec)) {
         return 0;
     } else {
