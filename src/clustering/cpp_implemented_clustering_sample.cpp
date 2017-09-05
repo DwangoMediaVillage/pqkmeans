@@ -8,7 +8,7 @@
 double l2distance(const std::vector<float> x, const std::vector<float> y) {
     assert(x.size() == y.size());
     float dist = 0;
-    for (int i = 0; i < x.size(); ++i) {
+    for (size_t i = 0; i < x.size(); ++i) {
         dist += std::abs(x[i] - y[i]);
     }
     return dist;
