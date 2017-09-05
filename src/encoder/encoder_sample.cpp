@@ -26,7 +26,7 @@ std::vector<long> EncoderSample::transform_one(const std::vector<float>& vector)
 }
 
 std::vector<float> EncoderSample::inverse_transform_one(const std::vector<long>& vector) {
-    long value = vector[0];
+    std::size_t value = (std::size_t)vector[0];
     if (value < index_dict.size()) {
         return index_dict[value];
     } else {
