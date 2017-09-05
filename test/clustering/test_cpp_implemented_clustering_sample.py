@@ -30,5 +30,5 @@ class TestCppImplementedClusteringSample(unittest.TestCase):
         # sample from each cluster
         counts = [0, 0]
         for vec, label in zip(source, encoded):
-            counts[int(label[0])] += 1
+            counts[int(label)] += 1
         self.assertEqual(counts[0], counts[1])
