@@ -20,6 +20,6 @@ PYBIND11_MODULE(_pqkmeans, m) {
 
     py::class_<BKMeans>(m, "BKMeans")
             .def(py::init<>())
-            .def("fit_one", &CppImplementedClusteringSample::fit_one)
-            .def("predict_one", &CppImplementedClusteringSample::predict_one);
+            .def("fit_one", &BKMeans::fit_one)
+            .def("predict_one", &BKMeans::predict_one);
 }
