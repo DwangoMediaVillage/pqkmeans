@@ -5,7 +5,7 @@
 #include "cpp_implemented_clustering_sample.h"
 
 
-double l2distance(const std::vector<float> x, const std::vector<float> y) {
+double l2distance(const std::vector<float>& x, const std::vector<float>& y) {
     assert(x.size() == y.size());
     float dist = 0;
     for (size_t i = 0; i < x.size(); ++i) {
@@ -14,7 +14,7 @@ double l2distance(const std::vector<float> x, const std::vector<float> y) {
     return dist;
 }
 
-double calc_score(const std::vector<float> x) {
+double calc_score(const std::vector<float>& x) {
     return std::accumulate(x.begin(), x.end(), 0);
 }
 
