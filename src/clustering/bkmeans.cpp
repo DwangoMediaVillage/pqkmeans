@@ -1,13 +1,12 @@
 //
 
 #include <bitset>
-#include <cstdint>
 #include "bkmeans.h"
 
 BKMeans::BKMeans() {
     std::string test = "test";
     auto data = new std::vector<std::bitset<32>>();
-    this->bKmeansImpl = new BKmeansImpl<32, 2>(
+    this->bKmeansInternal = new BKmeansInternal<32, 2>(
             *data,
             (unsigned int)3,
             (unsigned int)3,

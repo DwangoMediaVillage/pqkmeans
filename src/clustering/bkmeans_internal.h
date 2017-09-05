@@ -7,6 +7,7 @@
 #include <sstream>
 #include <random>
 #include <climits>
+#include "i_bkmeans_internal.h"
 
 namespace BKmeansUtil {
     enum InitCenterType {
@@ -19,13 +20,13 @@ namespace BKmeansUtil {
 
 
 template<size_t N, size_t SUB>
-class BKmeansImpl {
+class BKmeansInternal: public IBKmeansInternal {
 public:
     std::vector<std::bitset<N>> centroids;
     std::vector<unsigned int> assignments;
     BKmeansUtil::FindNNType findNNType;
 
-    BKmeansImpl(const std::vector<std::bitset<N>> &data, unsigned int k, unsigned int subspace, unsigned int iteration,
+    BKmeansInternal(const std::vector<std::bitset<N>> &data, unsigned int k, unsigned int subspace, unsigned int iteration,
                 bool store_assignment, const char *assignments_dir,
                 BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick,
                 std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) :
@@ -265,7 +266,7 @@ private:
 
 
         std::vector<std::bitset<N>> sampled_codes;
-        for (int i = 0; i < SAMPLE; ++i) { // 100 samples
+        for (unsigned int i = 0; i < SAMPLE; ++i) { // 100 samples
             std::cout << "create sample" << std::endl;
             int random_id = (unsigned int) mt() % (int) data.size();
             sampled_codes.push_back(data[random_id]);
@@ -314,7 +315,7 @@ private:
 
     std::bitset<SUB> SliceBitSet(const std::bitset<N> &vec, unsigned int start, unsigned int end) {
         std::bitset<SUB> sub;
-        for (int i = start; i < end; i++) {
+        for (unsigned int i = start; i < end; i++) {
             sub[i - start] = vec[i];
         }
         return sub;

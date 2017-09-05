@@ -4,18 +4,19 @@
 #define PQKMEANS_BKMEANS_H
 
 #include <vector>
-#include "bkmeans_impl.h"
+#include "i_bkmeans_internal.h"
+#include "bkmeans_internal.h"
 
 
 class BKMeans {
-    BKmeansImpl<32, 2>* bKmeansImpl;
+private:
+    IBKmeansInternal *bKmeansInternal;
 public:
     BKMeans();
 
     void fit_one(const std::vector<float> &pyvector);
 
     int predict_one(const std::vector<float> &pyvector);
-
 };
 
 
