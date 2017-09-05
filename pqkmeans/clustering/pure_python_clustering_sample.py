@@ -27,7 +27,7 @@ class PurePythonClusteringSample(sklearn.base.BaseEstimator, sklearn.base.Transf
             if self.ones.dot(vec) > self.ones.dot(self.max_vec):
                 self.max_vec = vec
 
-    def transform_generator(self, x_test: typing.Iterable[typing.Iterable[float]]):
+    def predict_generator(self, x_test: typing.Iterable[typing.Iterable[float]]):
         for vec in x_test:
             if self.distance(vec, self.min_vec) < self.distance(vec, self.max_vec):
                 yield 0
@@ -38,6 +38,6 @@ class PurePythonClusteringSample(sklearn.base.BaseEstimator, sklearn.base.Transf
         assert len(x_train.shape) == 2
         self.fit_generator(x_train)
 
-    def transform(self, x_test: numpy.array):
+    def predict(self, x_test: numpy.array):
         assert len(x_test.shape) == 2
-        return numpy.array(list(self.transform_generator(x_test)))
+        return numpy.array(list(self.predict_generator(x_test)))

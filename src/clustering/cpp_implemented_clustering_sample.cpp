@@ -36,7 +36,7 @@ void  CppImplementedClusteringSample::fit_one(const std::vector<float> pyvector)
     }
 }
 
-std::vector<float> CppImplementedClusteringSample::transform_one(const std::vector<float> pyvector) {
+std::vector<float> CppImplementedClusteringSample::predict_one(const std::vector<float> pyvector) {
     std::vector<float> result = {0};
     if (l2distance(pyvector, this->min_vec) < l2distance(pyvector, this->max_vec)) {
         result[0] = 0;

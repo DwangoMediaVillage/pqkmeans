@@ -16,7 +16,7 @@ class TestPurePythonClusteringSample(unittest.TestCase):
     def test_just_train_array(self):
         input_array = numpy.random.random((60, 10))
         self.clustering.fit(numpy.array(input_array))
-        encoded = list(self.clustering.transform(numpy.array(input_array)))
+        encoded = list(self.clustering.predict(numpy.array(input_array)))
         self.assertEqual(len(input_array), len(encoded))
 
     def test_fit_and_transform_generator(self):
@@ -28,7 +28,7 @@ class TestPurePythonClusteringSample(unittest.TestCase):
         self.clustering.fit(numpy.array(list(self.data_source(20))))
 
         # infinite list
-        encoded = self.clustering.transform_generator(self.data_source(100000000)) | pipe.take(60) | pipe.as_list
+        encoded = self.clustering.predict_generator(self.data_source(100000000)) | pipe.take(60) | pipe.as_list
 
         source = numpy.array(list(self.data_source(60)))
 

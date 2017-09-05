@@ -17,7 +17,7 @@ PYBIND11_PLUGIN(_pqkmeans) {
     py::class_<CppImplementedClusteringSample>(m, "CppImplementedClusteringSample")
             .def(py::init<>())
             .def("fit_one", &CppImplementedClusteringSample::fit_one)
-            .def("transform_one", &CppImplementedClusteringSample::transform_one);
+            .def("predict_one", &CppImplementedClusteringSample::predict_one);
 
     return m.ptr();
 }
