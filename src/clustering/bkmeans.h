@@ -31,6 +31,8 @@ public:
     void fit_one(const std::vector<float> &pyvector);
 
     int predict_one(const std::vector<float> &pyvector);
+
+    void fit(const std::vector<std::vector<unsigned int>> &pydata);
 };
 
 

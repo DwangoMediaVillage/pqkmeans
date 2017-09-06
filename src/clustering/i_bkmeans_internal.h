@@ -5,7 +5,8 @@
 
 
 class IBKmeansInternal {
-
+public:
+    virtual void fit(const std::vector<std::vector<unsigned int >> &data) = 0;
 };
 
 

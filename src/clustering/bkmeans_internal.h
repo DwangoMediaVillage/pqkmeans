@@ -7,6 +7,7 @@
 #include <sstream>
 #include <random>
 #include <climits>
+#include <cassert>
 #include "i_bkmeans_internal.h"
 
 namespace BKmeansUtil {
@@ -25,7 +26,7 @@ private:
     BKmeansUtil::FindNNType findNNType;
     BKmeansUtil::InitCenterType initCenterType;
     unsigned int iteration;
-    const char* assignments_dir;
+    const char *assignments_dir;
 public:
     std::vector<std::bitset<N>> centroids;
     std::vector<unsigned int> assignments;
@@ -61,11 +62,31 @@ public:
         this->bit_combinations = BitCombinations(this->subspace);
     }
 
+    void fit(const std::vector<std::vector<unsigned int >> &data) {
+        fit(data, std::vector<unsigned int>());
+    }
+
+    void fit(const std::vector<std::vector<unsigned int >> &data,
+             std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()
+    ) {
+        std::vector<std::bitset<N>> bitset_data;
+        for (std::size_t i = 0; i < data.size(); ++i) {
+            assert(data[i].size() == N);
+            std::bitset<N> datum;
+            for (size_t j = 0; j < N; ++j) {
+                datum[j] = (data[i][j] > 0);
+            }
+            bitset_data.push_back(datum);
+        }
+        fit(bitset_data, initialCentroidIndexs);
+    }
+
     void fit(const std::vector<std::bitset<N>> &data,
              std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) {
         std::cout << "init center" << std::endl;
         InitialzeCentroids(data, k, this->initCenterType, initialCentroidIndexs);
 
+        std::cout<<"start fit"<<std::endl;
         for (unsigned int i = 0; i < data.size(); i++) this->assignments.push_back(0);
 
         // update hash tables
@@ -79,7 +100,7 @@ public:
                 this->tables.at(j)[subvecs.at(j).to_ulong()] = i;
             }
         }
-        
+
         // select faster FindNN
         if (findNNType == BKmeansUtil::FindNNType::AUTO) {
             findNNType = SelectFasterFindNNType(data);
@@ -92,12 +113,12 @@ public:
             this->UpdateCenter(data);
             auto end = std::chrono::system_clock::now();
 
-            std::stringstream file_name;
-            file_name << assignments_dir << "/assignment_" << i << ".dat";
+//            std::stringstream file_name;
+//            file_name << assignments_dir << "/assignment_" << i << ".dat";
 //            ProjUtil::CsvData::WriteVector<unsigned int>(file_name.str().c_str(), this->assignments);
 
             // record time & assignment filename
-            std::cout << "iteration" << i << "," << last_time << "," << file_name.str() << std::endl;
+            std::cout << "iteration" << i << "," << last_time << std::endl;
             last_time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         }
     }
@@ -208,12 +229,11 @@ public:
 //                    unsigned long candidate = (this->tables.at(subindex).at((subvecs.at(subindex).to_ulong()) ^ difference));
                     unsigned long candidate = (this->tables.at(subindex).at(subvecs.at(subindex).to_ulong()));
                     cnt += 1;
-//                    std::cout<<
                     auto distance = CalcDistance(this->centroids.at(candidate), query);
-                    std::cout << "distance " << distance << std::endl;
-                    std::cout << distance << "<" << mindistance << std::endl;
-                    std::cout << (subradius + 1) << "*" << this->num_subspace - 1 << std::endl;
-                    std::cout << distance << "<=" << (subradius + 1) * this->num_subspace - 1 << std::endl;
+//                    std::cout << "distance " << distance << std::endl;
+//                    std::cout << distance << "<" << mindistance << std::endl;
+//                    std::cout << (subradius + 1) << "*" << this->num_subspace - 1 << std::endl;
+//                    std::cout << distance << "<=" << (subradius + 1) * this->num_subspace - 1 << std::endl;
                     if (distance < mindistance &&
                         distance <= (subradius + 1) * this->num_subspace - 1) { // true_radius
                         std::cout << "true radius" << std::endl;

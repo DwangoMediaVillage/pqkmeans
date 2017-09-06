@@ -21,7 +21,7 @@ PYBIND11_MODULE(_pqkmeans, m) {
 
     py::class_<BKMeans>(m, "BKMeans")
             .def(py::init<unsigned int, unsigned int>())
-            .def("fit_one", &BKMeans::fit_one)
+            .def("fit", &BKMeans::fit)
             .def("predict_one", &BKMeans::predict_one);
 
     py::register_exception_translator([](std::exception_ptr p) {
