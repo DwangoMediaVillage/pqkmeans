@@ -6,6 +6,7 @@
 
 namespace py = pybind11;
 
+
 PYBIND11_MODULE(_pqkmeans, m) {
     py::class_<EncoderSample>(m, "EncoderSample")
             .def(py::init<>())
@@ -19,7 +20,15 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def("predict_one", &CppImplementedClusteringSample::predict_one);
 
     py::class_<BKMeans>(m, "BKMeans")
-            .def(py::init<>())
+            .def(py::init<unsigned int, unsigned int>())
             .def("fit_one", &BKMeans::fit_one)
             .def("predict_one", &BKMeans::predict_one);
+
+    py::register_exception_translator([](std::exception_ptr p) {
+        try {
+            if (p) std::rethrow_exception(p);
+        } catch (const std::exception &e) {
+            PyErr_SetString(PyExc_RuntimeError, e.what());
+        }
+    });
 }

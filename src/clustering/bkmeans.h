@@ -7,12 +7,26 @@
 #include "i_bkmeans_internal.h"
 #include "bkmeans_internal.h"
 
+template<size_t N, size_t SUB>
+IBKmeansInternal *create_bkmeans() {
+    std::string test = "test";
+    auto data = new std::vector<std::bitset<32>>();
+    return new BKmeansInternal<N, SUB>(
+            *data,
+            (unsigned int) 3,
+            (unsigned int) 3,
+            (unsigned int) 3,
+            false,
+            test.c_str()
+    );
+};
+
 
 class BKMeans {
 private:
     IBKmeansInternal *bKmeansInternal;
 public:
-    BKMeans();
+    BKMeans(unsigned int dimention, unsigned int subspace);
 
     void fit_one(const std::vector<float> &pyvector);
 

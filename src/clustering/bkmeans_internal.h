@@ -20,16 +20,17 @@ namespace BKmeansUtil {
 
 
 template<size_t N, size_t SUB>
-class BKmeansInternal: public IBKmeansInternal {
+class BKmeansInternal : public IBKmeansInternal {
 public:
     std::vector<std::bitset<N>> centroids;
     std::vector<unsigned int> assignments;
     BKmeansUtil::FindNNType findNNType;
 
-    BKmeansInternal(const std::vector<std::bitset<N>> &data, unsigned int k, unsigned int subspace, unsigned int iteration,
-                bool store_assignment, const char *assignments_dir,
-                BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick,
-                std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) :
+    BKmeansInternal(const std::vector<std::bitset<N>> &data, unsigned int k, unsigned int subspace,
+                    unsigned int iteration,
+                    bool store_assignment, const char *assignments_dir,
+                    BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick,
+                    std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) :
             findNNType(BKmeansUtil::FindNNType::AUTO) {
 
         this->k = k;
@@ -44,8 +45,6 @@ public:
         std::cout << "init table" << std::endl;
         for (unsigned int i = 0; i < N; i += this->subspace) {
             std::cout << "init table: " << i << ": " << (1UL << this->subspace) << std::endl;
-////            std::vector<std::vector<int>> table(1UL << this->subspace);
-//            std::vector<std::vector<int>> table(1UL << (this->subspace-1));
             std::vector<unsigned long> table(1UL << this->subspace);
             std::cout << "init table: " << i << ": " << table.size() << std::endl;
             this->tables.push_back(table);
@@ -341,12 +340,7 @@ private:
         return count;
     }
 
-    size_t BitCount(std::bitset<N> value) {
-//        unsigned int count = 0;
-//        for(auto&& mask: bit_count_map) count+=(value&mask);
-////        for(unsigned long i=0; i<N; i++){
-////            if(value[i] == 1) count+=1;
-////        }
+    std::size_t BitCount(std::bitset<N> value) {
         return value.count();
     }
 };

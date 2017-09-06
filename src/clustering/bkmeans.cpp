@@ -2,18 +2,29 @@
 
 #include <bitset>
 #include "bkmeans.h"
+#include <sstream>
 
-BKMeans::BKMeans() {
-    std::string test = "test";
-    auto data = new std::vector<std::bitset<32>>();
-    this->bKmeansInternal = new BKmeansInternal<32, 2>(
-            *data,
-            (unsigned int)3,
-            (unsigned int)3,
-            (unsigned int)3,
-            false,
-            test.c_str()
-    );
+
+BKMeans::BKMeans(unsigned int dimention, unsigned int subspace) {
+
+    switch (dimention) {
+        case 32:
+            switch (subspace) {
+                case 2:
+                    this->bKmeansInternal = create_bkmeans<32, 2>();
+                    break;
+                default:
+                    std::ostringstream msg;
+                    msg << "(dimention, subspace) = (" << dimention << "," << subspace << " ) is not supported";
+                    throw msg;
+                    break;
+            }
+            break;
+        default:
+            std::ostringstream msg;
+            msg << "dimention : " << dimention << " is not supported";
+            throw msg;
+    }
 }
 
 void BKMeans::fit_one(const std::vector<float> &pyvector) {
