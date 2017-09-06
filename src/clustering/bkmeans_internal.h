@@ -21,25 +21,27 @@ namespace BKmeansUtil {
 
 template<size_t N, size_t SUB>
 class BKmeansInternal : public IBKmeansInternal {
+private:
+    BKmeansUtil::FindNNType findNNType;
+    BKmeansUtil::InitCenterType initCenterType;
+    unsigned int iteration;
+    const char* assignments_dir;
 public:
     std::vector<std::bitset<N>> centroids;
     std::vector<unsigned int> assignments;
-    BKmeansUtil::FindNNType findNNType;
 
-    BKmeansInternal(const std::vector<std::bitset<N>> &data, unsigned int k, unsigned int subspace,
+    BKmeansInternal(unsigned int k, unsigned int subspace,
                     unsigned int iteration,
                     bool store_assignment, const char *assignments_dir,
-                    BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick,
-                    std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) :
+                    BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick
+    ) :
             findNNType(BKmeansUtil::FindNNType::AUTO) {
 
         this->k = k;
         this->subspace = subspace;
-
-        std::cout << "init center" << std::endl;
-        InitialzeCentroids(data, k, initCenterType, initialCentroidIndexs);
-
-        for (unsigned int i = 0; i < data.size(); i++) this->assignments.push_back(0);
+        this->initCenterType = initCenterType;
+        this->iteration = iteration;
+        this->assignments_dir = assignments_dir;
 
         // initialize hash tables
         std::cout << "init table" << std::endl;
@@ -50,6 +52,21 @@ public:
             this->tables.push_back(table);
         }
         this->num_subspace = this->tables.size();
+
+        for (unsigned int i = 0; i < N; i++) {
+            std::bitset<N> bc;
+            bc[i] = 1;
+            this->bit_count_map.push_back(bc);
+        }
+        this->bit_combinations = BitCombinations(this->subspace);
+    }
+
+    void fit(const std::vector<std::bitset<N>> &data,
+             std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) {
+        std::cout << "init center" << std::endl;
+        InitialzeCentroids(data, k, this->initCenterType, initialCentroidIndexs);
+
+        for (unsigned int i = 0; i < data.size(); i++) this->assignments.push_back(0);
 
         // update hash tables
         std::cout << "update table" << std::endl;
@@ -62,13 +79,7 @@ public:
                 this->tables.at(j)[subvecs.at(j).to_ulong()] = i;
             }
         }
-        for (unsigned int i = 0; i < N; i++) {
-            std::bitset<N> bc;
-            bc[i] = 1;
-            this->bit_count_map.push_back(bc);
-        }
-        this->bit_combinations = BitCombinations(this->subspace);
-
+        
         // select faster FindNN
         if (findNNType == BKmeansUtil::FindNNType::AUTO) {
             findNNType = SelectFasterFindNNType(data);
@@ -344,6 +355,5 @@ private:
         return value.count();
     }
 };
-
 
 #endif //PQKMEANS_BKMEANS_IMPL_H

@@ -10,9 +10,7 @@
 template<size_t N, size_t SUB>
 IBKmeansInternal *create_bkmeans() {
     std::string test = "test";
-    auto data = new std::vector<std::bitset<32>>();
     return new BKmeansInternal<N, SUB>(
-            *data,
             (unsigned int) 3,
             (unsigned int) 3,
             (unsigned int) 3,
@@ -20,6 +18,8 @@ IBKmeansInternal *create_bkmeans() {
             test.c_str()
     );
 };
+
+template IBKmeansInternal* create_bkmeans<32, 2>();
 
 
 class BKMeans {
