@@ -1,7 +1,7 @@
 //
 
-#ifndef PQKMEANS_IBKMEANSIMPL_H
-#define PQKMEANS_IBKMEANSIMPL_H
+#ifndef PQKMEANS_IBKMEANS_INTERNAL_H
+#define PQKMEANS_IBKMEANS_INTERNAL_H
 
 namespace pqkmeans {
     class IBKmeansInternal {
@@ -10,4 +10,4 @@ namespace pqkmeans {
     };
 }
 
-#endif //PQKMEANS_IBKMEANSIMPL_H
+#endif //PQKMEANS_IBKMEANS_INTERNAL_H

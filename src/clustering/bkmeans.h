@@ -25,11 +25,9 @@ namespace pqkmeans {
 
     class BKMeans {
     private:
-        IBKmeansInternal *bKmeansInternal;
+        IBKmeansInternal *bKmeansInternal_;
     public:
         BKMeans(unsigned int dimention, unsigned int subspace);
-
-        void fit_one(const std::vector<float> &pyvector);
 
         int predict_one(const std::vector<float> &pyvector);
 
