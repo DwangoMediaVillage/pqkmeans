@@ -33,15 +33,10 @@ namespace pqkmeans {
         BKmeansInternal(unsigned int k, unsigned int subspace,
                         unsigned int iteration,
                         bool store_assignment, const char *assignments_dir,
-                        BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick
+                        BKmeansUtil::InitCenterType init_center_type = BKmeansUtil::InitCenterType::RandomPick
         ) :
-                find_nn_type_(BKmeansUtil::FindNNType::Auto) {
-
-            this->k_ = k;
-            this->subspace_ = subspace;
-            this->init_center_type_ = initCenterType;
-            this->iteration_ = iteration;
-            this->assignments_dir_ = assignments_dir;
+                find_nn_type_(BKmeansUtil::FindNNType::Auto), k_(k), subspace_(subspace), iteration_(iteration),
+                assignments_dir_(assignments_dir), init_center_type_(init_center_type) {
 
             // initialize hash tables
             for (unsigned int i = 0; i < N; i += this->subspace_) {
@@ -159,7 +154,8 @@ namespace pqkmeans {
             }
         }
 
-        void InitialzeCentroids(const std::vector<std::bitset<N>> &data, unsigned int k, BKmeansUtil::InitCenterType initCenterType,
+        void InitialzeCentroids(const std::vector<std::bitset<N>> &data, unsigned int k,
+                                BKmeansUtil::InitCenterType initCenterType,
                                 std::vector<unsigned int> initialCentroidIndexs) {
             this->centroids.clear();
             std::mt19937 mt(0);
@@ -241,13 +237,13 @@ namespace pqkmeans {
 
     private:
         std::vector<std::vector<std::vector<int>>> tables_;
-        BKmeansUtil::InitCenterType init_center_type_;
-        const char *assignments_dir_;
-        unsigned int iteration_;
         unsigned int k_;
-        unsigned long error_;
         unsigned int subspace_;
-        unsigned int num_subspace_; //ceil(N/SUB)
+        unsigned int iteration_;
+        const char *assignments_dir_;
+        BKmeansUtil::InitCenterType init_center_type_;
+        unsigned long error_;
+        unsigned long num_subspace_; //ceil(N/SUB)
         // [000] -> [100, 010, 001] -> [110, 101, ...]
         std::vector<std::vector<unsigned long>> bit_combinations_;
         std::vector<std::bitset<N>> bit_count_map_;
@@ -259,7 +255,7 @@ namespace pqkmeans {
 
             std::vector<std::bitset<N> > sampled_codes;
             for (unsigned int i = 0; i < SAMPLE; ++i) { // 100 samples
-                int random_id =  (unsigned int) mt() % (int) data.size();
+                int random_id = (unsigned int) mt() % (int) data.size();
                 sampled_codes.push_back(data[random_id]);
             }
 
@@ -313,7 +309,7 @@ namespace pqkmeans {
             std::vector<std::vector<unsigned long>> ret;
             for (unsigned int target_bit = 0; target_bit < num_bits + 1; target_bit++) {
                 std::vector<unsigned long> combinations;
-                for (unsigned long num = 0; num < (unsigned long)(1 << num_bits); num++) {
+                for (unsigned long num = 0; num < (unsigned long) (1 << num_bits); num++) {
                     if (BitCount(num, num_bits) == target_bit) combinations.push_back(num);
                 }
                 ret.push_back(combinations);
@@ -323,7 +319,7 @@ namespace pqkmeans {
 
         unsigned int BitCount(unsigned long value, unsigned int num_bits) {
             unsigned int count = 0;
-            for (unsigned long mask = 1; mask < (unsigned long)(1 << num_bits); mask <<= 1) {
+            for (unsigned long mask = 1; mask < (unsigned long) (1 << num_bits); mask <<= 1) {
                 if ((value & mask) != 0) count += 1;
             }
             return count;
