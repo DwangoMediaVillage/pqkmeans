@@ -159,14 +159,6 @@ public:
         }
         std::cout << "error:" << this->error << std::endl;
 
-        // debug
-        for (auto &&cnt: count[10]) {
-            if (cnt == all_count[assignments[10]]) {
-                std::cout << cnt << ",";
-            }
-        }
-        std::cout << std::endl;
-
         // update
         for (unsigned int i = 0; i < this->k; i++) {
             for (unsigned int d = 0; d < N; d++) {
