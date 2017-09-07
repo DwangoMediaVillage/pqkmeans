@@ -349,7 +349,7 @@ namespace pqkmeans {
             std::vector<std::vector<unsigned long>> ret;
             for (unsigned int target_bit = 0; target_bit < num_bits + 1; target_bit++) {
                 std::vector<unsigned long> combinations;
-                for (unsigned long num = 0; num < 1 << num_bits; num++) {
+                for (unsigned long num = 0; num < (unsigned long)(1 << num_bits); num++) {
                     if (BitCount(num, num_bits) == target_bit) combinations.push_back(num);
                 }
                 ret.push_back(combinations);
@@ -359,7 +359,7 @@ namespace pqkmeans {
 
         unsigned int BitCount(unsigned long value, unsigned int num_bits) {
             unsigned int count = 0;
-            for (unsigned long mask = 1; mask < 1 << num_bits; mask <<= 1) {
+            for (unsigned long mask = 1; mask < (unsigned long)(1 << num_bits); mask <<= 1) {
                 if ((value & mask) != 0) count += 1;
             }
             return count;
