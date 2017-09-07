@@ -22,14 +22,14 @@ BKMeans::BKMeans(unsigned int dimention, unsigned int subspace) {
                 default:
                     std::ostringstream msg;
                     msg << "(dimention, subspace) = (" << dimention << "," << subspace << " ) is not supported";
-                    throw msg;
+                    throw msg.str();
                     break;
             }
             break;
         default:
             std::ostringstream msg;
             msg << "dimention : " << dimention << " is not supported";
-            throw msg;
+            throw msg.str();
     }
 }
 

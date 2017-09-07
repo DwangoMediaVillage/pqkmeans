@@ -6,6 +6,8 @@
 #include <iostream>
 #include <sstream>
 #include <random>
+#include <bitset>
+#include <chrono>
 #include <climits>
 #include <cassert>
 #include "i_bkmeans_internal.h"
