@@ -1,12 +1,10 @@
 //
 
 #include <bitset>
-#include "bkmeans.h"
-#include <sstream>
+#include "./bkmeans.h"
 
 namespace pqkmeans {
     BKMeans::BKMeans(unsigned int dimention, unsigned int subspace) {
-
         switch (dimention) {
             case 32:
                 switch (subspace) {
@@ -21,7 +19,10 @@ namespace pqkmeans {
                         break;
                     default:
                         std::ostringstream msg;
-                        msg << "(dimention, subspace) = (" << dimention << "," << subspace << " ) is not supported";
+                        msg
+                        << "(dimention, subspace) = ("
+                        << dimention << "," << subspace
+                        << " ) is not supported";
                         throw msg.str();
                         break;
                 }
@@ -43,4 +44,4 @@ namespace pqkmeans {
     int BKMeans::predict_one(const std::vector<float> &pyvector) {
         return 0;
     }
-}
+}  // namespace pqkmeans

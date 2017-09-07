@@ -1,7 +1,7 @@
 //
 
-#ifndef PQKMEANS_BKMEANS_IMPL_H
-#define PQKMEANS_BKMEANS_IMPL_H
+#ifndef PQKMEANS_BKMEANS_INTERNAL_H
+#define PQKMEANS_BKMEANS_INTERNAL_H
 
 #include <iostream>
 #include <sstream>
@@ -14,14 +14,13 @@
 
 namespace pqkmeans {
     namespace BKmeansUtil {
-        enum InitCenterType {
+        enum class InitCenterType {
             RandomPick, Random, Outer
         };
-        enum FindNNType {
-            Table, Linear, AUTO
+        enum class FindNNType {
+            Table, Linear, Auto
         };
     }
-
 
     template<size_t N, size_t SUB>
     class BKmeansInternal : public IBKmeansInternal {
@@ -39,7 +38,7 @@ namespace pqkmeans {
                         bool store_assignment, const char *assignments_dir,
                         BKmeansUtil::InitCenterType initCenterType = BKmeansUtil::InitCenterType::RandomPick
         ) :
-                findNNType(BKmeansUtil::FindNNType::AUTO) {
+                findNNType(BKmeansUtil::FindNNType::Auto) {
 
             this->k = k;
             this->subspace = subspace;
@@ -105,7 +104,7 @@ namespace pqkmeans {
             }
 
             // select faster FindNN
-            if (findNNType == BKmeansUtil::FindNNType::AUTO) {
+            if (findNNType == BKmeansUtil::FindNNType::Auto) {
                 findNNType = SelectFasterFindNNType(data);
             }
 
@@ -372,4 +371,4 @@ namespace pqkmeans {
     };
 }
 
-#endif //PQKMEANS_BKMEANS_IMPL_H
+#endif //PQKMEANS_BKMEANS_INTERNAL_H

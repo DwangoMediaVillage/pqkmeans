@@ -6,7 +6,7 @@
 
 namespace py = pybind11;
 
-namespace pqkmeans{
+namespace pqkmeans {
     PYBIND11_MODULE(_pqkmeans, m) {
         py::class_<EncoderSample>(m, "EncoderSample")
                 .def(py::init<>())
@@ -20,8 +20,8 @@ namespace pqkmeans{
                 .def("predict_one", &CppImplementedClusteringSample::predict_one);
 
         py::class_<BKMeans>(m, "BKMeans")
-                .def(py::init<unsigned int, unsigned int>())
+                .def(py::init < unsigned int, unsigned int > ())
                 .def("fit", &BKMeans::fit)
                 .def("predict_one", &BKMeans::predict_one);
     }
-}
+}  // namespace pqkmeans
