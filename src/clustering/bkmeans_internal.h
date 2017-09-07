@@ -164,18 +164,18 @@ namespace pqkmeans {
             this->centroids.clear();
             std::mt19937 mt(0);
             if (initCenterType == BKmeansUtil::InitCenterType::Random) {
-                std::uniform_int_distribution<u_long> randbit_generator(0, 1);
+                std::uniform_int_distribution<unsigned long> randbit_generator(0, 1);
                 // initialize centroids
                 for (unsigned int i = 0; i < k; i++) {
                     std::bitset<N> centroid;
-                    for (u_long j = 0; j < centroid.size(); j++) {
+                    for (unsigned long j = 0; j < centroid.size(); j++) {
                         centroid[j] = randbit_generator(mt);
                     }
                     centroids.push_back(centroid);
                 }
             } else if (initCenterType == BKmeansUtil::InitCenterType::RandomPick) {
                 // initialize centroids with data
-                std::uniform_int_distribution<u_long> randdataindex(0, data.size() - 1);
+                std::uniform_int_distribution<unsigned long> randdataindex(0, data.size() - 1);
                 for (unsigned int i = 0; i < k; i++) {
                     std::bitset<N> copy(data.at(randdataindex(mt)));
                     centroids.push_back(copy);
@@ -195,8 +195,8 @@ namespace pqkmeans {
 
                 // is there any candidate really within radius from query?
                 int minindex = -1;
-                u_long mindistance = N;
-                u_long cnt = 0;
+                unsigned long mindistance = N;
+                unsigned long cnt = 0;
                 for (auto difference: differences) {
                     for (unsigned int subindex = 0; subindex < this->num_subspace_; subindex++) {
                         for (auto &&candidate: this->tables_[subindex][subvecs[subindex].to_ulong() ^ difference]) {
@@ -222,7 +222,7 @@ namespace pqkmeans {
 
         int FindNNLinear(const std::bitset<N> &query) {
             int minindex = -1;
-            u_long mindistance = N;
+            unsigned long mindistance = N;
             for (unsigned int i = 0; i < this->k_; i++) {
                 auto distance = CalcDistance(centroids.at(i), query);
                 if (distance < mindistance) {
@@ -245,11 +245,11 @@ namespace pqkmeans {
         const char *assignments_dir_;
         unsigned int iteration_;
         unsigned int k_;
-        u_long error_;
+        unsigned long error_;
         unsigned int subspace_;
         unsigned int num_subspace_; //ceil(N/SUB)
         // [000] -> [100, 010, 001] -> [110, 101, ...]
-        std::vector<std::vector<u_long>> bit_combinations_;
+        std::vector<std::vector<unsigned long>> bit_combinations_;
         std::vector<std::bitset<N>> bit_count_map_;
 
         BKmeansUtil::FindNNType SelectFasterFindNNType(const std::vector<std::bitset<N>> &data) {
@@ -309,11 +309,11 @@ namespace pqkmeans {
             return sub;
         }
 
-        std::vector<std::vector<u_long >> BitCombinations(unsigned int num_bits) {
-            std::vector<std::vector<u_long>> ret;
+        std::vector<std::vector<unsigned long >> BitCombinations(unsigned int num_bits) {
+            std::vector<std::vector<unsigned long>> ret;
             for (unsigned int target_bit = 0; target_bit < num_bits + 1; target_bit++) {
-                std::vector<u_long> combinations;
-                for (u_long num = 0; num < 1 << num_bits; num++) {
+                std::vector<unsigned long> combinations;
+                for (unsigned long num = 0; num < (unsigned long)(1 << num_bits); num++) {
                     if (BitCount(num, num_bits) == target_bit) combinations.push_back(num);
                 }
                 ret.push_back(combinations);
@@ -321,9 +321,9 @@ namespace pqkmeans {
             return ret;
         }
 
-        unsigned int BitCount(u_long value, unsigned int num_bits) {
+        unsigned int BitCount(unsigned long value, unsigned int num_bits) {
             unsigned int count = 0;
-            for (u_long mask = 1; mask < 1 << num_bits; mask <<= 1) {
+            for (unsigned long mask = 1; mask < (unsigned long)(1 << num_bits); mask <<= 1) {
                 if ((value & mask) != 0) count += 1;
             }
             return count;
