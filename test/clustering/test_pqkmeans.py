@@ -7,22 +7,17 @@ class TestPQKMeans(unittest.TestCase):
         for i in range(n):
             yield [i * 100] * 6
 
-    def test_just_constuction(self):
-        print([n for n in self.data_source(10)])
-        print("just construction")
-        enc = pqkmeans.encoder.PQEncoder(num_dim=2)
-        enc.fit(numpy.array(list(self.data_source(600))))
-        pqkmeans.clustering.PQKMeans(32, enc.trained_encoder.codewords)
+    def setUp(self):
+        # Train PQ encoder
+        self.encoder = pqkmeans.encoder.PQEncoder(num_dim=2, Ks=10)
+        self.encoder.fit(numpy.array(list(self.data_source(100))))
 
-        #pqkmeans = pqkmeans.clustering.PQKmeans(32)
-        #bkmeans = pqkmeans.clustering.BKMeans(32, 2)
+    def test_just_construction(self):
+        pqkmeans.clustering.PQKMeans(codewords=self.encoder.codewords, K=5, itr=10)
 
-    def test_invalid_construction(self):
-        print("vald construction")
-        #self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(10000, 1))
-        #self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(32, 100))
 
     def test_fit_and_predict(self):
         print("fit_and_predict")
-        #bkmeans = pqkmeans.clustering.BKMeans(32, 2)
-        #bkmeans.fit(numpy.array(list(self.data_source(10))))
+        engine = pqkmeans.clustering.PQKMeans(codewords=self.encoder.codewords, K=5, itr=10)
+        codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
+        engine.fit(codes)

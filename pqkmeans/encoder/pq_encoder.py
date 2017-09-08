@@ -60,5 +60,7 @@ class PQEncoder(EncoderBase):
         assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using thie method."
         return self._buffered_process(x_test, self.trained_encoder.decode_multi)
 
-
-
+    @property
+    def codewords(self):
+        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using thie method."
+        return self.trained_encoder.codewords

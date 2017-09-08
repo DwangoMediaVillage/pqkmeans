@@ -3,6 +3,7 @@
 #include "encoder/encoder_sample.h"
 #include "clustering/cpp_implemented_clustering_sample.h"
 #include "clustering/bkmeans.h"
+#include "clustering/pqkmeans.h"
 
 namespace py = pybind11;
 
@@ -23,5 +24,11 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def(py::init < unsigned int, unsigned int > ())
             .def("fit", &BKMeans::fit)
             .def("predict_one", &BKMeans::predict_one);
+
+    py::class_<PQKmeans>(m, "PQKMeans")
+            .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int >())
+            .def("fit", &PQKmeans::fit)
+            .def("predict_one", &PQKmeans::predict_one);
+
 }
 }  // namespace pqkmeans
