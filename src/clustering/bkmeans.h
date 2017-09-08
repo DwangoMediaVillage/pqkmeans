@@ -9,23 +9,20 @@
 
 namespace pqkmeans {
 template<size_t N, size_t SUB>
-IBKmeansInternal *create_bkmeans() {
+std::unique_ptr<IBKmeansInternal> create_bkmeans() {
     std::string test = "test";
-    return new BKmeansInternal<N, SUB>(
+    return std::unique_ptr<IBKmeansInternal>(new BKmeansInternal<N, SUB>(
             (unsigned int) 3,
             (unsigned int) 3,
             (unsigned int) 3,
             false,
             test.c_str()
-    );
+    ));
 };
-
-template IBKmeansInternal *create_bkmeans<32, 2>();
-
 
 class BKMeans {
 private:
-    IBKmeansInternal *bKmeansInternal_;
+    std::unique_ptr<IBKmeansInternal> bKmeansInternal_;
 public:
     BKMeans(unsigned int dimention, unsigned int subspace);
 
