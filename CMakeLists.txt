@@ -8,8 +8,6 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter")
 
-include(~/research/project/pqkmeans/FindPythonAnaconda.cmake)
-
 add_subdirectory(ext/pybind)
 file(GLOB SOURCES src/_pqkmeans.cpp src/**/*.cpp)
 pybind11_add_module(_pqkmeans ${SOURCES})
