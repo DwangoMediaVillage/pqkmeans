@@ -234,7 +234,6 @@ public:
     unsigned int CalcDistance(const std::bitset<N> &a, const std::bitset<N> &b) {
         return BitCount(a ^ b);
     }
-
 private:
     std::vector<std::vector<std::vector<int>>> tables_;
     unsigned int k_;
