@@ -26,7 +26,7 @@ private:
 public:
     BKMeans(unsigned int dimention, unsigned int subspace);
 
-    int predict_one(const std::vector<float> &pyvector);
+    int predict_one(const std::vector<unsigned int> &pyvector);
 
     void fit(const std::vector<std::vector<unsigned int>> &pydata);
 };

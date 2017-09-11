@@ -57,17 +57,22 @@ public:
         fit(data, std::vector<unsigned int>());
     }
 
+    std::bitset<N> vector2bitset(std::vector<unsigned int> datum) {
+        assert(datum.size() == N);
+        std::bitset<N> bitset;
+        for (std::size_t j = 0; j < N; ++j) {
+            bitset[j] = (datum[j] > 0);
+        }
+        return bitset;
+
+    }
+
     void fit(const std::vector<std::vector<unsigned int >> &data,
              std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()
     ) {
         std::vector<std::bitset<N>> bitset_data;
         for (std::size_t i = 0; i < data.size(); ++i) {
-            assert(data[i].size() == N);
-            std::bitset<N> datum;
-            for (std::size_t j = 0; j < N; ++j) {
-                datum[j] = (data[i][j] > 0);
-            }
-            bitset_data.push_back(datum);
+            bitset_data.push_back(vector2bitset(data[i]));
         }
         fit(bitset_data, initialCentroidIndexs);
     }
@@ -120,14 +125,7 @@ public:
 
 #pragma omp parallel for
         for (unsigned int i = 0; i < data.size(); i++) {
-            if (find_nn_type_ == BKmeansUtil::FindNNType::Table) {
-                assignments.at(i) = FindNN(data.at(i));
-            } else if (find_nn_type_ == BKmeansUtil::FindNNType::Linear) {
-                assignments.at(i) = FindNNLinear(data.at(i));
-            } else {
-                std::cerr << "ERROR: FINDNNTYPE" << std::endl;
-                throw;
-            }
+            assignments.at(i) = FindNearestCentroid(data.at(i));
         }
         // critical section
         for (unsigned int i = 0; i < data.size(); i++) {
@@ -154,86 +152,21 @@ public:
         }
     }
 
-    void InitialzeCentroids(const std::vector<std::bitset<N>> &data, unsigned int k,
-                            BKmeansUtil::InitCenterType initCenterType,
-                            std::vector<unsigned int> initialCentroidIndexs) {
-        this->centroids.clear();
-        std::mt19937 mt(0);
-        if (initCenterType == BKmeansUtil::InitCenterType::Random) {
-            std::uniform_int_distribution<unsigned long> randbit_generator(0, 1);
-            // initialize centroids
-            for (unsigned int i = 0; i < k; i++) {
-                std::bitset<N> centroid;
-                for (unsigned long j = 0; j < centroid.size(); j++) {
-                    centroid[j] = randbit_generator(mt);
-                }
-                centroids.push_back(centroid);
-            }
-        } else if (initCenterType == BKmeansUtil::InitCenterType::RandomPick) {
-            // initialize centroids with data
-            std::uniform_int_distribution<unsigned long> randdataindex(0, data.size() - 1);
-            for (unsigned int i = 0; i < k; i++) {
-                std::bitset<N> copy(data.at(randdataindex(mt)));
-                centroids.push_back(copy);
-            }
-        } else if (initCenterType == BKmeansUtil::InitCenterType::Outer) {
-            for (auto &&index: initialCentroidIndexs) {
-                std::bitset<N> copy(data.at(index));
-                centroids.push_back(copy);
-            }
+    int FindNearestCentroid(const std::vector<unsigned int> &query){
+        return FindNearestCentroid(vector2bitset(query));
+    }
+
+    int FindNearestCentroid(const std::bitset<N> &query){
+        if (find_nn_type_ == BKmeansUtil::FindNNType::Table) {
+            return FindNNTable(query);
+        } else if (find_nn_type_ == BKmeansUtil::FindNNType::Linear) {
+            return FindNNLinear(query);
+        } else {
+            std::cerr << "ERROR: FINDNNTYPE" << std::endl;
+            throw;
         }
     }
 
-    int FindNN(const std::bitset<N> &query) {
-        auto subvecs = SplitToSubSpace(query);
-        for (unsigned int subradius = 0; subradius < N; subradius++) {
-            const auto differences = this->bit_combinations_.at(subradius);
-
-            // is there any candidate really within radius from query?
-            int minindex = -1;
-            unsigned long mindistance = N;
-            unsigned long cnt = 0;
-            for (auto difference: differences) {
-                for (unsigned int subindex = 0; subindex < this->num_subspace_; subindex++) {
-                    for (auto &&candidate: this->tables_[subindex][subvecs[subindex].to_ulong() ^ difference]) {
-                        cnt += 1;
-                        auto distance = CalcDistance(this->centroids.at(candidate), query);
-                        if (distance < mindistance &&
-                            distance <= (subradius + 1) * this->num_subspace_ - 1) { // true_radius
-                            minindex = candidate;
-                            mindistance = distance;
-                        }
-                    }
-                }
-            }
-            //std::cout<<"calc for "<<cnt<<"times"<<std::endl;
-
-            if (minindex != -1) {
-                this->error_ += mindistance;
-                return minindex;
-            }
-        }
-        return -1;
-    }
-
-    int FindNNLinear(const std::bitset<N> &query) {
-        int minindex = -1;
-        unsigned long mindistance = N;
-        for (unsigned int i = 0; i < this->k_; i++) {
-            auto distance = CalcDistance(centroids.at(i), query);
-            if (distance < mindistance) {
-                minindex = i;
-                mindistance = distance;
-            }
-        }
-//        std::cout<<mindistance<<std::endl;
-        this->error_ += mindistance;
-        return minindex;
-    }
-
-    unsigned int CalcDistance(const std::bitset<N> &a, const std::bitset<N> &b) {
-        return BitCount(a ^ b);
-    }
 private:
     std::vector<std::vector<std::vector<int>>> tables_;
     unsigned int k_;
@@ -268,7 +201,7 @@ private:
         // TABLE
         auto start_table = std::chrono::system_clock::now();
         for (const auto &code : sampled_codes) {
-            FindNN(code);
+            FindNNTable(code);
         }
         auto end_table = std::chrono::system_clock::now();
 
@@ -327,6 +260,89 @@ private:
     unsigned int BitCount(std::bitset<N> value) {
         return value.count();
     }
+
+    void InitialzeCentroids(const std::vector<std::bitset<N>> &data, unsigned int k,
+                            BKmeansUtil::InitCenterType initCenterType,
+                            std::vector<unsigned int> initialCentroidIndexs) {
+        this->centroids.clear();
+        std::mt19937 mt(0);
+        if (initCenterType == BKmeansUtil::InitCenterType::Random) {
+            std::uniform_int_distribution<unsigned long> randbit_generator(0, 1);
+            // initialize centroids
+            for (unsigned int i = 0; i < k; i++) {
+                std::bitset<N> centroid;
+                for (unsigned long j = 0; j < centroid.size(); j++) {
+                    centroid[j] = randbit_generator(mt);
+                }
+                centroids.push_back(centroid);
+            }
+        } else if (initCenterType == BKmeansUtil::InitCenterType::RandomPick) {
+            // initialize centroids with data
+            std::uniform_int_distribution<unsigned long> randdataindex(0, data.size() - 1);
+            for (unsigned int i = 0; i < k; i++) {
+                std::bitset<N> copy(data.at(randdataindex(mt)));
+                centroids.push_back(copy);
+            }
+        } else if (initCenterType == BKmeansUtil::InitCenterType::Outer) {
+            for (auto &&index: initialCentroidIndexs) {
+                std::bitset<N> copy(data.at(index));
+                centroids.push_back(copy);
+            }
+        }
+    }
+
+    int FindNNTable(const std::bitset<N> &query) {
+        auto subvecs = SplitToSubSpace(query);
+        for (unsigned int subradius = 0; subradius < N; subradius++) {
+            const auto differences = this->bit_combinations_.at(subradius);
+
+            // is there any candidate really within radius from query?
+            int minindex = -1;
+            unsigned long mindistance = N;
+            unsigned long cnt = 0;
+            for (auto difference: differences) {
+                for (unsigned int subindex = 0; subindex < this->num_subspace_; subindex++) {
+                    for (auto &&candidate: this->tables_[subindex][subvecs[subindex].to_ulong() ^ difference]) {
+                        cnt += 1;
+                        auto distance = CalcDistance(this->centroids.at(candidate), query);
+                        if (distance < mindistance &&
+                            distance <= (subradius + 1) * this->num_subspace_ - 1) { // true_radius
+                            minindex = candidate;
+                            mindistance = distance;
+                        }
+                    }
+                }
+            }
+            //std::cout<<"calc for "<<cnt<<"times"<<std::endl;
+
+            if (minindex != -1) {
+                this->error_ += mindistance;
+                return minindex;
+            }
+        }
+        return -1;
+    }
+
+    int FindNNLinear(const std::bitset<N> &query) {
+        int minindex = -1;
+        unsigned long mindistance = N;
+        for (unsigned int i = 0; i < this->k_; i++) {
+            auto distance = CalcDistance(centroids.at(i), query);
+            if (distance < mindistance) {
+                minindex = i;
+                mindistance = distance;
+            }
+        }
+//        std::cout<<mindistance<<std::endl;
+        this->error_ += mindistance;
+        return minindex;
+    }
+
+    unsigned int CalcDistance(const std::bitset<N> &a, const std::bitset<N> &b) {
+        return BitCount(a ^ b);
+    }
+
+
 };
 }
 
