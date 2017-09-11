@@ -4,18 +4,18 @@
 #include "./bkmeans.h"
 
 namespace pqkmeans {
-BKMeans::BKMeans(unsigned int dimention, unsigned int subspace) {
+BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace) {
     switch (dimention) {
         case 32:
             switch (subspace) {
                 case 2:
-                    this->bKmeansInternal_ = create_bkmeans<32, 2>();
+                    this->bKmeansInternal_ = create_bkmeans<32, 2>(k);
                     break;
                 case 4:
-                    this->bKmeansInternal_ = create_bkmeans<32, 4>();
+                    this->bKmeansInternal_ = create_bkmeans<32, 4>(k);
                     break;
                 case 8:
-                    this->bKmeansInternal_ = create_bkmeans<32, 8>();
+                    this->bKmeansInternal_ = create_bkmeans<32, 8>(k);
                     break;
                 default:
                     std::ostringstream msg;
@@ -33,6 +33,11 @@ BKMeans::BKMeans(unsigned int dimention, unsigned int subspace) {
             throw msg.str();
     }
 }
+
+const std::vector<int> BKMeans::GetAssignments(){
+    return this->bKmeansInternal_->GetAssignments();
+};
+
 
 void BKMeans::fit(const std::vector<std::vector<unsigned int >> &pydata) {
     this->bKmeansInternal_->fit(pydata);

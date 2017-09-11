@@ -1,20 +1,31 @@
 import unittest
 import pqkmeans
 import numpy
+import collections
 
 class TestBKMeans(unittest.TestCase):
-    def data_source(self, n: int):
+    def data_source(self, n: int, bits):
         for i in range(n):
             for _ in range(3):
-                yield [i * 100] * 5
+                datum = numpy.zeros((bits,), dtype=int)
+                datum[:i] = 1
+                yield datum
 
     def test_just_constuction(self):
-        bkmeans = pqkmeans.clustering.BKMeans(32, 2)
+        bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=32, subspace_dim=2)
 
     def test_invalid_construction(self):
         self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(10000, 1))
         self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(32, 100))
 
     def test_fit_and_predict(self):
-        bkmeans = pqkmeans.clustering.BKMeans(32, 2)
-        bkmeans.fit(numpy.array(list(self.data_source(10))))
+        bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=32, subspace_dim=2)
+        data = numpy.array(list(self.data_source(10, bits=32)))
+        predicted = bkmeans.fit_predict(data)
+        print(predicted)
+
+        count = collections.defaultdict(int)
+        for cluster in predicted:
+            count[cluster] += 1
+
+        self.assertGreaterEqual(min(count.values()), max(count.values()) * 0.95)

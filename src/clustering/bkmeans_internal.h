@@ -26,8 +26,6 @@ enum class FindNNType {
 template<size_t N, size_t SUB>
 class BKmeansInternal : public IBKmeansInternal {
 public:
-    std::vector<std::bitset<N>> centroids;
-    std::vector<int> assignments;
     BKmeansUtil::FindNNType find_nn_type_;
 
     BKmeansInternal(unsigned int k, unsigned int subspace,
@@ -66,6 +64,10 @@ public:
         return bitset;
 
     }
+
+    const std::vector<int> GetAssignments(){
+        return assignments;
+    };
 
     void fit(const std::vector<std::vector<unsigned int >> &data,
              std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()
@@ -169,6 +171,8 @@ public:
 
 private:
     std::vector<std::vector<std::vector<int>>> tables_;
+    std::vector<std::bitset<N>> centroids;
+    std::vector<int> assignments;
     unsigned int k_;
     unsigned int subspace_;
     unsigned int iteration_;
