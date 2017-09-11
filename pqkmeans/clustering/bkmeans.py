@@ -6,7 +6,7 @@ import _pqkmeans
 
 
 class BKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
-    def __init__(self, k, input_dim, subspace_dim = 2):
+    def __init__(self, k, input_dim, subspace_dim=2):
         super().__init__()
         self._impl = _pqkmeans.BKMeans(k, input_dim, subspace_dim)
 

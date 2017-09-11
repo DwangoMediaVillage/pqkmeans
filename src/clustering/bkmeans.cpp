@@ -34,7 +34,7 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace) 
     }
 }
 
-const std::vector<int> BKMeans::GetAssignments(){
+const std::vector<int> BKMeans::GetAssignments() {
     return this->bKmeansInternal_->GetAssignments();
 };
 

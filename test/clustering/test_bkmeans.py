@@ -3,6 +3,7 @@ import pqkmeans
 import numpy
 import collections
 
+
 class TestBKMeans(unittest.TestCase):
     def data_source(self, n: int, bits):
         for i in range(n):
@@ -22,7 +23,6 @@ class TestBKMeans(unittest.TestCase):
         bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=32, subspace_dim=2)
         data = numpy.array(list(self.data_source(10, bits=32)))
         predicted = bkmeans.fit_predict(data)
-        print(predicted)
 
         count = collections.defaultdict(int)
         for cluster in predicted:

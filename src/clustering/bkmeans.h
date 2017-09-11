@@ -14,9 +14,7 @@ std::unique_ptr<IBKmeansInternal> create_bkmeans(unsigned int k) {
     return std::unique_ptr<IBKmeansInternal>(new BKmeansInternal<N, SUB>(
             k,
             (unsigned int) 3,
-            (unsigned int) 3,
-            false,
-            test.c_str()
+            false
     ));
 };
 
@@ -29,7 +27,8 @@ public:
     int predict_one(const std::vector<unsigned int> &pyvector);
 
     void fit(const std::vector<std::vector<unsigned int>> &pydata);
-const std::vector<int> GetAssignments();
+
+    const std::vector<int> GetAssignments();
 };
 }
 

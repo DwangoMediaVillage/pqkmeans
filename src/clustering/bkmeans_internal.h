@@ -28,17 +28,17 @@ class BKmeansInternal : public IBKmeansInternal {
 public:
     BKmeansUtil::FindNNType find_nn_type_;
 
-    BKmeansInternal(unsigned int k, unsigned int subspace,
+    BKmeansInternal(unsigned int k,
                     unsigned int iteration,
-                    bool store_assignment, const char *assignments_dir,
+                    bool verbose = false,
                     BKmeansUtil::InitCenterType init_center_type = BKmeansUtil::InitCenterType::RandomPick
     ) :
-            find_nn_type_(BKmeansUtil::FindNNType::Auto), k_(k), subspace_(subspace), iteration_(iteration),
-            assignments_dir_(assignments_dir), init_center_type_(init_center_type) {
+            find_nn_type_(BKmeansUtil::FindNNType::Auto), k_(k), iteration_(iteration),
+            verbose_(verbose), init_center_type_(init_center_type) {
 
         // initialize hash tables
-        for (unsigned int i = 0; i < N; i += this->subspace_) {
-            std::vector<std::vector<int>> table(1UL << this->subspace_);
+        for (unsigned int i = 0; i < N; i += SUB) {
+            std::vector<std::vector<int>> table(1UL << SUB);
             this->tables_.push_back(table);
         }
         this->num_subspace_ = this->tables_.size();
@@ -48,7 +48,7 @@ public:
             bc[i] = 1;
             this->bit_count_map_.push_back(bc);
         }
-        this->bit_combinations_ = BitCombinations(this->subspace_);
+        this->bit_combinations_ = BitCombinations((unsigned int) SUB);
     }
 
     void fit(const std::vector<std::vector<unsigned int >> &data) {
@@ -65,7 +65,7 @@ public:
 
     }
 
-    const std::vector<int> GetAssignments(){
+    const std::vector<int> GetAssignments() {
         return assignments;
     };
 
@@ -104,12 +104,8 @@ public:
             this->UpdateCenter(data);
             auto end = std::chrono::system_clock::now();
 
-//                std::stringstream file_name;
-//                file_name << assignments_dir_ << "/assignment_" << i << ".dat";
-//                ProjUtil::CsvData::WriteVector<int>(file_name.str().c_str(), this->assignments);
-
             // record time & assignment filename
-            std::cout << "iteration" << i << "," << last_time << std::endl;
+            if (verbose_)std::cout << "iteration" << i << "," << last_time << std::endl;
             last_time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         }
     }
@@ -140,7 +136,7 @@ public:
                 }
             }
         }
-        std::cout << "error:" << this->error_ << std::endl;
+        if (verbose_)std::cout << "error:" << this->error_ << std::endl;
 
         // update
         for (unsigned int i = 0; i < this->k_; i++) {
@@ -154,11 +150,11 @@ public:
         }
     }
 
-    int FindNearestCentroid(const std::vector<unsigned int> &query){
+    int FindNearestCentroid(const std::vector<unsigned int> &query) {
         return FindNearestCentroid(vector2bitset(query));
     }
 
-    int FindNearestCentroid(const std::bitset<N> &query){
+    int FindNearestCentroid(const std::bitset<N> &query) {
         if (find_nn_type_ == BKmeansUtil::FindNNType::Table) {
             return FindNNTable(query);
         } else if (find_nn_type_ == BKmeansUtil::FindNNType::Linear) {
@@ -174,9 +170,8 @@ private:
     std::vector<std::bitset<N>> centroids;
     std::vector<int> assignments;
     unsigned int k_;
-    unsigned int subspace_;
     unsigned int iteration_;
-    const char *assignments_dir_;
+    bool verbose_;
     BKmeansUtil::InitCenterType init_center_type_;
     unsigned long error_;
     unsigned long num_subspace_; //ceil(N/SUB)
@@ -185,7 +180,8 @@ private:
     std::vector<std::bitset<N>> bit_count_map_;
 
     BKmeansUtil::FindNNType SelectFasterFindNNType(const std::vector<std::bitset<N>> &data) {
-        std::cout << "Start SelectFasterFindNNType" << std::endl;
+
+        if (verbose_)std::cout << "Start SelectFasterFindNNType" << std::endl;
         unsigned int SAMPLE = 100;
         std::mt19937 mt(123);
 
@@ -216,18 +212,18 @@ private:
         "Linear: " << time_linear << "[ms]" <<
         "Table: " << time_table << "[ms]" << std::endl;
         if (time_linear < time_table) {
-            std::cout << "Use Linear" << std::endl;
+            if (verbose_)std::cout << "Use Linear" << std::endl;
             return BKmeansUtil::FindNNType::Linear;
         } else {
-            std::cout << "Use Table" << std::endl;
+            if (verbose_)std::cout << "Use Table" << std::endl;
             return BKmeansUtil::FindNNType::Table;
         }
     }
 
     std::vector<std::bitset<SUB>> SplitToSubSpace(const std::bitset<N> &vec) {
         std::vector<std::bitset<SUB>> subvecs;
-        for (unsigned int i = 0; i < vec.size(); i += subspace_) {
-            std::bitset<SUB> subvec = SliceBitSet(vec, i, i + subspace_);
+        for (unsigned int i = 0; i < vec.size(); i += SUB) {
+            std::bitset<SUB> subvec = SliceBitSet(vec, i, i + SUB);
             subvecs.push_back(subvec);
         }
         return subvecs;
@@ -241,7 +237,7 @@ private:
         return sub;
     }
 
-    std::vector<std::vector<unsigned long >> BitCombinations(unsigned int num_bits) {
+    std::vector<std::vector<unsigned long >> BitCombinations(size_t num_bits) {
         std::vector<std::vector<unsigned long>> ret;
         for (unsigned int target_bit = 0; target_bit < num_bits + 1; target_bit++) {
             std::vector<unsigned long> combinations;
@@ -317,7 +313,6 @@ private:
                     }
                 }
             }
-            //std::cout<<"calc for "<<cnt<<"times"<<std::endl;
 
             if (minindex != -1) {
                 this->error_ += mindistance;
@@ -337,7 +332,6 @@ private:
                 mindistance = distance;
             }
         }
-//        std::cout<<mindistance<<std::endl;
         this->error_ += mindistance;
         return minindex;
     }
