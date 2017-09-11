@@ -56,13 +56,19 @@ public:
     }
 
     std::bitset<N> vector2bitset(std::vector<unsigned int> datum) {
-        assert(datum.size() == N);
+        if (datum.size() != N) {
+            std::ostringstream msg;
+            msg
+            << "datum.size ("
+            << datum.size()
+            << " ) should be same as input_dim";
+            throw msg.str();
+        }
         std::bitset<N> bitset;
         for (std::size_t j = 0; j < N; ++j) {
             bitset[j] = (datum[j] > 0);
         }
         return bitset;
-
     }
 
     const std::vector<int> GetAssignments() {

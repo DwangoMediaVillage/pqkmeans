@@ -6,9 +6,9 @@ import _pqkmeans
 
 
 class BKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
-    def __init__(self, k, input_dim, subspace_dim=2):
+    def __init__(self, k, input_dim, subspace_dim=8, iteration=10, verbose=False):
         super().__init__()
-        self._impl = _pqkmeans.BKMeans(k, input_dim, subspace_dim)
+        self._impl = _pqkmeans.BKMeans(k, input_dim, subspace_dim, iteration, verbose)
 
     def predict_generator(self, x_test: typing.Iterable[typing.Iterable[float]]):
         for vec in x_test:

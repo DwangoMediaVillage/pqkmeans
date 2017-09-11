@@ -29,3 +29,9 @@ class TestBKMeans(unittest.TestCase):
             count[cluster] += 1
 
         self.assertGreaterEqual(min(count.values()), max(count.values()) * 0.95)
+
+        a = bkmeans.predict(numpy.ones((1,32), dtype=int))
+        b = bkmeans.predict(numpy.ones((1,32), dtype=int))
+        self.assertEqual(a, b)
+
+        self.assertRaises(Exception, lambda: bkmeans.predict(numpy.ones((1,33), dtype=int)))

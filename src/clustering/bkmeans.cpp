@@ -4,18 +4,18 @@
 #include "./bkmeans.h"
 
 namespace pqkmeans {
-BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace) {
+BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, unsigned int iteration, bool verbose) {
     switch (dimention) {
         case 32:
             switch (subspace) {
                 case 2:
-                    this->bKmeansInternal_ = create_bkmeans<32, 2>(k);
+                    this->bKmeansInternal_ = create_bkmeans<32, 2>(k, iteration, verbose);
                     break;
                 case 4:
-                    this->bKmeansInternal_ = create_bkmeans<32, 4>(k);
+                    this->bKmeansInternal_ = create_bkmeans<32, 4>(k, iteration, verbose);
                     break;
                 case 8:
-                    this->bKmeansInternal_ = create_bkmeans<32, 8>(k);
+                    this->bKmeansInternal_ = create_bkmeans<32, 8>(k, iteration, verbose);
                     break;
                 default:
                     std::ostringstream msg;
