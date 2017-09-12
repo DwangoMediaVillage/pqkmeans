@@ -27,9 +27,12 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def_property_readonly("labels_", &BKMeans::GetAssignments)
             .def_property_readonly("cluster_centers_", &BKMeans::GetClusterCenters);
 
-    py::class_<PQKmeans>(m, "PQKMeans")
-            .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int >())
-            .def("fit", &PQKmeans::fit)
-            .def("predict_one", &PQKmeans::predict_one);
+    py::class_<PQKMeans>(m, "PQKMeans")
+            .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int, bool >())
+            .def("fit", &PQKMeans::fit)
+            .def("predict_one", &PQKMeans::predict_one)
+            .def_property_readonly("labels_", &PQKMeans::GetAssignments)
+            .def_property_readonly("cluster_centers_", &PQKMeans::GetClusterCenters);
+
 }
 }  // namespace pqkmeans
