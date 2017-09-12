@@ -34,7 +34,7 @@ public:
                     bool verbose = false,
                     BKmeansUtil::InitCenterType init_center_type = BKmeansUtil::InitCenterType::RandomPick
     ) :
-            find_nn_type_(BKmeansUtil::FindNNType::Auto), k_(k), iteration_(iteration),
+            find_nn_type_(BKmeansUtil::FindNNType::Linear), k_(k), iteration_(iteration),
             verbose_(verbose), init_center_type_(init_center_type) {
 
         // initialize hash tables
@@ -56,7 +56,7 @@ public:
         fit(data, std::vector<unsigned int>());
     }
 
-    std::bitset<N> vector2bitset(const std::vector<unsigned int>& datum) {
+    std::bitset<N> vector2bitset(const std::vector<unsigned int> &datum) {
         if (datum.size() != N) {
             std::ostringstream msg;
             msg
@@ -72,7 +72,7 @@ public:
         return bitset;
     }
 
-    std::vector<unsigned int> bitset2vector(const std::bitset<N> bitset){
+    std::vector<unsigned int> bitset2vector(const std::bitset<N> bitset) {
         std::vector<unsigned int> vector(bitset.size());
         for (std::size_t i = 0; i < bitset.size(); ++i) {
             vector[i] = (bitset[i] == true ? 1 : 0);
@@ -85,8 +85,9 @@ public:
     };
 
     const std::shared_ptr<std::vector<std::vector<unsigned int>>> GetClusterCenters() {
-        std::shared_ptr<std::vector<std::vector<unsigned int>>> cluster_centers_array(new std::vector<std::vector<unsigned int>>());
-        for(auto datum: cluster_centers_){
+        std::shared_ptr<std::vector<std::vector<unsigned int>>> cluster_centers_array(
+                new std::vector<std::vector<unsigned int>>());
+        for (auto datum: cluster_centers_) {
             cluster_centers_array->push_back(bitset2vector(datum));
         }
         return cluster_centers_array;
@@ -164,10 +165,12 @@ public:
         // update
         for (unsigned int i = 0; i < this->k_; i++) {
             for (unsigned int d = 0; d < N; d++) {
-                if (count.at(i).at(d) >= 0) {
+                if (count.at(i).at(d) > 0) {
                     cluster_centers_.at(i)[d] = 1;
-                } else {
+                } else if (count.at(i).at(d) < 0) {
                     cluster_centers_.at(i)[d] = 0;
+                } else {
+                    // nothing to do if there are same numbers of positives and negatives
                 }
             }
         }
@@ -231,9 +234,11 @@ private:
         // select faster method
         auto time_linear = std::chrono::duration_cast<std::chrono::nanoseconds>(end_linear - start_linear).count();
         auto time_table = std::chrono::duration_cast<std::chrono::nanoseconds>(end_table - start_table).count();
-        std::cout << "<" << SAMPLE << "sample test> " <<
-        "Linear: " << time_linear << "[ms]" <<
-        "Table: " << time_table << "[ms]" << std::endl;
+        if (verbose_) {
+            std::cout << "<" << SAMPLE << "sample test> " <<
+            "Linear: " << time_linear << "[ms]" <<
+            "Table: " << time_table << "[ms]" << std::endl;
+        }
         if (time_linear < time_table) {
             if (verbose_)std::cout << "Use Linear" << std::endl;
             return BKmeansUtil::FindNNType::Linear;
@@ -303,7 +308,9 @@ private:
             // initialize cluster_centers_ with data
             std::uniform_int_distribution<unsigned long> randdataindex(0, data.size() - 1);
             for (unsigned int i = 0; i < k; i++) {
-                std::bitset<N> copy(data.at(randdataindex(mt)));
+                unsigned long randomIndex;
+                randomIndex = randdataindex(mt);
+                std::bitset<N> copy(data.at(randomIndex));
                 cluster_centers_.push_back(copy);
             }
         } else if (initCenterType == BKmeansUtil::InitCenterType::Outer) {
