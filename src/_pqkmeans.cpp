@@ -21,14 +21,15 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def("predict_one", &CppImplementedClusteringSample::predict_one);
 
     py::class_<BKMeans>(m, "BKMeans")
-            .def(py::init < unsigned int, unsigned int > ())
+            .def(py::init <unsigned int, unsigned int, unsigned int, unsigned int, bool > ())
             .def("fit", &BKMeans::fit)
-            .def("predict_one", &BKMeans::predict_one);
+            .def("predict_one", &BKMeans::predict_one)
+            .def_property_readonly("labels_", &BKMeans::GetAssignments)
+            .def_property_readonly("cluster_centers_", &BKMeans::GetClusterCenters);
 
     py::class_<PQKmeans>(m, "PQKMeans")
             .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int >())
             .def("fit", &PQKmeans::fit)
             .def("predict_one", &PQKmeans::predict_one);
-
 }
 }  // namespace pqkmeans

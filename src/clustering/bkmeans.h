@@ -4,34 +4,35 @@
 #define PQKMEANS_BKMEANS_H
 
 #include <vector>
+#include <memory>
 #include "i_bkmeans_internal.h"
 #include "bkmeans_internal.h"
 
 namespace pqkmeans {
 template<size_t N, size_t SUB>
-IBKmeansInternal *create_bkmeans() {
+std::unique_ptr<IBKmeansInternal> create_bkmeans(unsigned int k, unsigned int iteration, bool verbose = false) {
     std::string test = "test";
-    return new BKmeansInternal<N, SUB>(
-            (unsigned int) 3,
-            (unsigned int) 3,
-            (unsigned int) 3,
-            false,
-            test.c_str()
-    );
+    return std::unique_ptr<IBKmeansInternal>(new BKmeansInternal<N, SUB>(
+            k,
+            iteration,
+            verbose
+    ));
 };
-
-template IBKmeansInternal *create_bkmeans<32, 2>();
-
 
 class BKMeans {
 private:
-    IBKmeansInternal *bKmeansInternal_;
+    std::unique_ptr<IBKmeansInternal> bKmeansInternal_;
 public:
-    BKMeans(unsigned int dimention, unsigned int subspace);
+    BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, unsigned int iteration,
+            bool verbose = false);
 
-    int predict_one(const std::vector<float> &pyvector);
+    int predict_one(const std::vector<unsigned int> &pyvector);
 
     void fit(const std::vector<std::vector<unsigned int>> &pydata);
+
+    const std::vector<int> GetAssignments();
+
+    std::vector<std::vector<unsigned int>> GetClusterCenters();
 };
 }
 
