@@ -11,6 +11,7 @@
 #include <chrono>
 #include <climits>
 #include <cassert>
+#include <memory>
 #include "i_bkmeans_internal.h"
 
 namespace pqkmeans {
@@ -55,7 +56,7 @@ public:
         fit(data, std::vector<unsigned int>());
     }
 
-    std::bitset<N> vector2bitset(std::vector<unsigned int> datum) {
+    std::bitset<N> vector2bitset(const std::vector<unsigned int>& datum) {
         if (datum.size() != N) {
             std::ostringstream msg;
             msg
@@ -71,8 +72,24 @@ public:
         return bitset;
     }
 
+    std::vector<unsigned int> bitset2vector(const std::bitset<N> bitset){
+        std::vector<unsigned int> vector(bitset.size());
+        for (std::size_t i = 0; i < bitset.size(); ++i) {
+            vector[i] = (bitset[i] == true ? 1 : 0);
+        }
+        return vector;
+    }
+
     const std::vector<int> GetAssignments() {
-        return assignments;
+        return assignments_;
+    };
+
+    const std::shared_ptr<std::vector<std::vector<unsigned int>>> GetClusterCenters() {
+        std::shared_ptr<std::vector<std::vector<unsigned int>>> cluster_centers_array(new std::vector<std::vector<unsigned int>>());
+        for(auto datum: cluster_centers_){
+            cluster_centers_array->push_back(bitset2vector(datum));
+        }
+        return cluster_centers_array;
     };
 
     void fit(const std::vector<std::vector<unsigned int >> &data,
@@ -88,11 +105,11 @@ public:
     void fit(const std::vector<std::bitset<N>> &data,
              std::vector<unsigned int> initialCentroidIndexs = std::vector<unsigned int>()) {
         InitialzeCentroids(data, k_, this->init_center_type_, initialCentroidIndexs);
-        for (unsigned int i = 0; i < data.size(); i++) this->assignments.push_back(0);
+        for (unsigned int i = 0; i < data.size(); i++) this->assignments_.push_back(0);
 
         // update hash tables
         for (unsigned int i = 0; i < k_; i++) {
-            auto subvecs = SplitToSubSpace(this->centroids.at(i));
+            auto subvecs = SplitToSubSpace(this->cluster_centers_.at(i));
             for (unsigned int j = 0; j < subvecs.size(); j++) {
                 this->tables_.at(j)[subvecs.at(j).to_ulong()].push_back(i);
             }
@@ -129,16 +146,16 @@ public:
 
 #pragma omp parallel for
         for (unsigned int i = 0; i < data.size(); i++) {
-            assignments.at(i) = FindNearestCentroid(data.at(i));
+            assignments_.at(i) = FindNearestCentroid(data.at(i));
         }
         // critical section
         for (unsigned int i = 0; i < data.size(); i++) {
-            all_count[assignments[i]] += 1;
+            all_count[assignments_[i]] += 1;
             for (unsigned int d = 0; d < N; d++) {
                 if (data.at(i)[d] == 1) {
-                    count.at(assignments.at(i)).at(d) += 1;
+                    count.at(assignments_.at(i)).at(d) += 1;
                 } else {
-                    count.at(assignments.at(i)).at(d) += -1;
+                    count.at(assignments_.at(i)).at(d) += -1;
                 }
             }
         }
@@ -148,9 +165,9 @@ public:
         for (unsigned int i = 0; i < this->k_; i++) {
             for (unsigned int d = 0; d < N; d++) {
                 if (count.at(i).at(d) >= 0) {
-                    centroids.at(i)[d] = 1;
+                    cluster_centers_.at(i)[d] = 1;
                 } else {
-                    centroids.at(i)[d] = 0;
+                    cluster_centers_.at(i)[d] = 0;
                 }
             }
         }
@@ -173,8 +190,8 @@ public:
 
 private:
     std::vector<std::vector<std::vector<int>>> tables_;
-    std::vector<std::bitset<N>> centroids;
-    std::vector<int> assignments;
+    std::vector<std::bitset<N>> cluster_centers_;
+    std::vector<int> assignments_;
     unsigned int k_;
     unsigned int iteration_;
     bool verbose_;
@@ -270,29 +287,29 @@ private:
     void InitialzeCentroids(const std::vector<std::bitset<N>> &data, unsigned int k,
                             BKmeansUtil::InitCenterType initCenterType,
                             std::vector<unsigned int> initialCentroidIndexs) {
-        this->centroids.clear();
+        this->cluster_centers_.clear();
         std::mt19937 mt(0);
         if (initCenterType == BKmeansUtil::InitCenterType::Random) {
             std::uniform_int_distribution<unsigned long> randbit_generator(0, 1);
-            // initialize centroids
+            // initialize cluster_centers_
             for (unsigned int i = 0; i < k; i++) {
                 std::bitset<N> centroid;
                 for (unsigned long j = 0; j < centroid.size(); j++) {
                     centroid[j] = randbit_generator(mt);
                 }
-                centroids.push_back(centroid);
+                cluster_centers_.push_back(centroid);
             }
         } else if (initCenterType == BKmeansUtil::InitCenterType::RandomPick) {
-            // initialize centroids with data
+            // initialize cluster_centers_ with data
             std::uniform_int_distribution<unsigned long> randdataindex(0, data.size() - 1);
             for (unsigned int i = 0; i < k; i++) {
                 std::bitset<N> copy(data.at(randdataindex(mt)));
-                centroids.push_back(copy);
+                cluster_centers_.push_back(copy);
             }
         } else if (initCenterType == BKmeansUtil::InitCenterType::Outer) {
             for (auto &&index: initialCentroidIndexs) {
                 std::bitset<N> copy(data.at(index));
-                centroids.push_back(copy);
+                cluster_centers_.push_back(copy);
             }
         }
     }
@@ -310,7 +327,7 @@ private:
                 for (unsigned int subindex = 0; subindex < this->num_subspace_; subindex++) {
                     for (auto &&candidate: this->tables_[subindex][subvecs[subindex].to_ulong() ^ difference]) {
                         cnt += 1;
-                        auto distance = CalcDistance(this->centroids.at(candidate), query);
+                        auto distance = CalcDistance(this->cluster_centers_.at(candidate), query);
                         if (distance < mindistance &&
                             distance <= (subradius + 1) * this->num_subspace_ - 1) { // true_radius
                             minindex = candidate;
@@ -332,7 +349,7 @@ private:
         int minindex = -1;
         unsigned long mindistance = N;
         for (unsigned int i = 0; i < this->k_; i++) {
-            auto distance = CalcDistance(centroids.at(i), query);
+            auto distance = CalcDistance(cluster_centers_.at(i), query);
             if (distance < mindistance) {
                 minindex = i;
                 mindistance = distance;

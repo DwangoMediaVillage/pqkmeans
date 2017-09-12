@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <random>
 #include <cfloat>
-#include <omp.h>
 
 namespace pqkmeans {
 

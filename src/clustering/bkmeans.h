@@ -4,7 +4,6 @@
 #define PQKMEANS_BKMEANS_H
 
 #include <vector>
-// just needed for old GCC to use unique_ptr
 #include <memory>
 #include "i_bkmeans_internal.h"
 #include "bkmeans_internal.h"
@@ -24,13 +23,16 @@ class BKMeans {
 private:
     std::unique_ptr<IBKmeansInternal> bKmeansInternal_;
 public:
-    BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, unsigned int iteration, bool verbose = false);
+    BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, unsigned int iteration,
+            bool verbose = false);
 
     int predict_one(const std::vector<unsigned int> &pyvector);
 
     void fit(const std::vector<std::vector<unsigned int>> &pydata);
 
     const std::vector<int> GetAssignments();
+
+    std::vector<std::vector<unsigned int>> GetClusterCenters();
 };
 }
 

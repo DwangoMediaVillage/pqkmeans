@@ -24,7 +24,8 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def(py::init <unsigned int, unsigned int, unsigned int, unsigned int, bool > ())
             .def("fit", &BKMeans::fit)
             .def("predict_one", &BKMeans::predict_one)
-            .def_property_readonly("labels_", &BKMeans::GetAssignments);
+            .def_property_readonly("labels_", &BKMeans::GetAssignments)
+            .def_property_readonly("cluster_centers_", &BKMeans::GetClusterCenters);
 
     py::class_<PQKmeans>(m, "PQKMeans")
             .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int >())

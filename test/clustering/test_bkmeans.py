@@ -35,3 +35,16 @@ class TestBKMeans(unittest.TestCase):
         self.assertEqual(a, b)
 
         self.assertRaises(Exception, lambda: bkmeans.predict(numpy.ones((1,33), dtype=int)))
+
+    def test_cluster_centers_are_really_neareset(self):
+        bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=32, subspace_dim=2)
+        data = numpy.array(list(self.data_source(10, bits=32)))
+        predicted = bkmeans.fit_predict(data)
+        cluster_centers = bkmeans.cluster_centers_
+
+        for cluster, datum in zip(predicted, data):
+            other_cluster = (cluster + 1) % max(predicted)
+            self.assertLessEqual(
+                numpy.linalg.norm(cluster_centers[cluster] - datum),
+                numpy.linalg.norm(cluster_centers[other_cluster] - datum),
+            )

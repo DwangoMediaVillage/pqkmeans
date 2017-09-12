@@ -46,4 +46,10 @@ void BKMeans::fit(const std::vector<std::vector<unsigned int >> &pydata) {
 int BKMeans::predict_one(const std::vector<unsigned int> &pyvector) {
     return this->bKmeansInternal_->FindNearestCentroid(pyvector);
 }
+
+std::vector<std::vector<unsigned int>> BKMeans::GetClusterCenters() {
+    return *(this->bKmeansInternal_->GetClusterCenters());
+}
+
+
 }  // namespace pqkmeans

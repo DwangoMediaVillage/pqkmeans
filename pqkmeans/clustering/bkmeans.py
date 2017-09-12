@@ -25,3 +25,7 @@ class BKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
     @property
     def labels_(self):
         return self._impl.labels_
+
+    @property
+    def cluster_centers_(self):
+        return self._impl.cluster_centers_
