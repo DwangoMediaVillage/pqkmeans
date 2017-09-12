@@ -13,11 +13,11 @@ class TestPQKMeans(unittest.TestCase):
         self.encoder.fit(numpy.array(list(self.data_source(100))))
 
     def test_just_construction(self):
-        pqkmeans.clustering.PQKMeans(codewords=self.encoder.codewords, K=5, itr=10)
+        pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=True)
 
 
     def test_fit_and_predict(self):
         print("fit_and_predict")
-        engine = pqkmeans.clustering.PQKMeans(codewords=self.encoder.codewords, K=5, itr=10)
+        engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=True)
         codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
         engine.fit(codes)
