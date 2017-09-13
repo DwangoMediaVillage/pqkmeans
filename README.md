@@ -80,8 +80,7 @@ encoder = pqkmeans.encoder.PQEncoder(num_subdim=4, Ks=256)
 encoder.fit(X)
 
 # Convert input vectors to 32-bit PQ codes, where each PQ code consists of four uint8.
-# You can train the encoder and
-# transform the input vectors to PQ codespreliminary.
+# You can train the encoder and transform the input vectors to PQ codes preliminary.
 X_pqcode = encoder.transform(X)
 
 # Run clustering with k=5 clusters.
