@@ -49,6 +49,5 @@ for algorithm in args.algorithms:
                                                                                            args.k)
     print("""
     {}:
-        micro_average_error: {}
-        macro_average_error: {}
+        Error: {}
     """.format(algorithm, micro_average_error, macro_average_error))
