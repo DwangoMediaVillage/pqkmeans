@@ -20,7 +20,8 @@ class ITQEncoder(EncoderBase):
             data_matrix_projection = data_matrix_pca.dot(self.R)
             return data_matrix_projection >= 0
 
-    def __init__(self, iteration: int = 50, num_bit: int = 32):
+    def __init__(self, iteration=50, num_bit=32):
+        # type: (int, int) -> None
         self.iteration = iteration
         self.num_bit = num_bit
         self.trained_encoder = None  # type: ITQEncoder.TrainedITQEncoder
@@ -59,16 +60,19 @@ class ITQEncoder(EncoderBase):
             R = UB.dot(UA)
         return R
 
-    def fit(self, x_train: numpy.array):
+    def fit(self, x_train):
+        # type: (numpy.array) -> None
         assert len(x_train.shape) == 2
         assert x_train.shape[1] >= self.num_bit, "target dimention should be larger than input dimention"
         data_preprocessed, pca = self.__preprocess(x_train, self.num_bit)
         R = self.__fit(data_preprocessed, self.num_bit, self.iteration)
         self.trained_encoder = self.TrainedITQEncoder(R, pca, self.num_bit)
 
-    def transform_generator(self, x_test: typing.Iterable[typing.Iterator[float]]):
+    def transform_generator(self, x_test):
+        # type: (typing.Iterable[typing.Iterator[float]]) -> Any
         assert self.trained_encoder is not None, "This ITQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using this method."
         return self._buffered_process(x_test, self.trained_encoder.encode_multi)
 
-    def inverse_transform_generator(self, x_test: typing.Iterable[typing.Iterator[int]]):
+    def inverse_transform_generator(self, x_test):
+        # type: (typing.Iterable[typing.Iterator[int]]) -> Any
         raise ("cannot decode binary to original with ITQ")

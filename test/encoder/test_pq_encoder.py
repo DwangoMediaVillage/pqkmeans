@@ -3,6 +3,7 @@ import pqkmeans
 import numpy
 import pipe
 
+
 class TestPQEncoder(unittest.TestCase):
     def data_source(self, n: int):
         for i in range(n):
@@ -25,8 +26,8 @@ class TestPQEncoder(unittest.TestCase):
         encoded = self.encoder.transform_generator(self.data_source(100000000)) | pipe.take(60) | pipe.as_list
 
         for i in range(0, len(encoded), 3):
-            numpy.testing.assert_array_almost_equal(encoded[i], encoded[i+1])
-            numpy.testing.assert_array_almost_equal(encoded[i], encoded[i+2])
+            numpy.testing.assert_array_almost_equal(encoded[i], encoded[i + 1])
+            numpy.testing.assert_array_almost_equal(encoded[i], encoded[i + 2])
 
     def test_transform_and_inverse_transform(self):
         input_array = numpy.random.random((300, 10))

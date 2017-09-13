@@ -24,7 +24,6 @@ def dependencies():
         for line in f:
             if line.find("git") >= 0:
                 list_requirements.append(line.rstrip())
-    print(list_requirements)
     return list_requirements
 
 
@@ -93,9 +92,6 @@ setup(
     long_description='',
     install_requires=requirements(),
     dependency_links=dependencies(),
-    # dependency_links=[
-    #     "git+https://github.com/Hi-king/read_texmex_dataset_python.git#egg=read_texmex_dataset_python-1.0"
-    # ],
     packages=find_packages(),
     ext_modules=[CMakeExtension('_pqkmeans')],
     cmdclass=dict(build_ext=CMakeBuild),

@@ -14,7 +14,8 @@ class PurePythonClusteringSample(sklearn.base.BaseEstimator, sklearn.base.Cluste
         y_projected = self.ones.dot(y)
         return numpy.abs(x_projected - y_projected)
 
-    def fit_generator(self, x_train: typing.Iterable[typing.Iterable[float]]):
+    def fit_generator(self, x_train):
+        # type: (typing.Iterable[typing.Iterable[float]]) -> None
         for vec in x_train:
             if self.min_vec is None:
                 self.min_vec = vec
@@ -27,17 +28,20 @@ class PurePythonClusteringSample(sklearn.base.BaseEstimator, sklearn.base.Cluste
             if self.ones.dot(vec) > self.ones.dot(self.max_vec):
                 self.max_vec = vec
 
-    def predict_generator(self, x_test: typing.Iterable[typing.Iterable[float]]):
+    def predict_generator(self, x_test):
+        # type: (typing.Iterable[typing.Iterable[float]]) -> Any
         for vec in x_test:
             if self.distance(vec, self.min_vec) < self.distance(vec, self.max_vec):
                 yield 0
             else:
                 yield 1
 
-    def fit(self, x_train: numpy.array):
+    def fit(self, x_train):
+        # type: (numpy.array) -> None
         assert len(x_train.shape) == 2
         self.fit_generator(x_train)
 
-    def predict(self, x_test: numpy.array):
+    def predict(self, x_test):
+        # type: (numpy.array) -> Any
         assert len(x_test.shape) == 2
         return numpy.array(list(self.predict_generator(x_test)))

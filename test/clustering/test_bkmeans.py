@@ -5,7 +5,8 @@ import collections
 
 
 class TestBKMeans(unittest.TestCase):
-    def data_source(self, n: int, bits):
+    def data_source(self, n, bits):
+        # type: (int, int) -> Any
         for i in range(n):
             for _ in range(1):
                 datum = numpy.zeros((bits,), dtype=int)
