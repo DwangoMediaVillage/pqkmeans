@@ -10,16 +10,16 @@ import argparse
 ALL_ALGORITHMS = ["kmeans", "pqkmeans", "bkmeans", "random"]
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset", default="siftsmall", choices=["siftsmall", "sift1m", "random"])
+parser.add_argument("--dataset", default="siftsmall", choices=["siftsmall", "sift1m", "artificial"])
 parser.add_argument("--algorithms", default=ALL_ALGORITHMS, nargs="+", choices=ALL_ALGORITHMS)
-parser.add_argument("--k", default=5, type=int)
+parser.add_argument("--k", default=100, type=int)
 args = parser.parse_args()
 
 if args.dataset == "siftsmall":
     learn_data, test_data = pqkmeans.evaluation.get_siftsmall_dataset()
 elif args.dataset == "sift1m":
     learn_data, test_data = pqkmeans.evaluation.get_sift1m_dataset()
-elif args.dataset == "random":
+elif args.dataset == "artificial":
     learn_data, test_data = pqkmeans.evaluation.get_gmm_random_dataset(k=args.k)
 else:
     raise Exception("no such dataset: {}".format(args.dataset))
@@ -31,8 +31,8 @@ for algorithm in args.algorithms:
     elif algorithm == "pqkmeans":
         encoder = pqkmeans.encoder.PQEncoder()
         encoder.fit(learn_data)
-        kmeans = pqkmeans.clustering.PQKMeans(k=args.k, iteration=10, encoder=encoder)
         coded = encoder.transform(test_data)
+        kmeans = pqkmeans.clustering.PQKMeans(k=args.k, iteration=10, encoder=encoder)
         predicted = kmeans.fit_predict(coded)
     elif algorithm == "bkmeans":
         encoder = pqkmeans.encoder.ITQEncoder(num_bit=32)
