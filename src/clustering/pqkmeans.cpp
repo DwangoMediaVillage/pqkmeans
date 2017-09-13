@@ -11,9 +11,13 @@ PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int
     std::size_t Ks = codewords[0].size();  // The number of codewords for each subspace
     assert(Ks == codewords[0][0].size());
 
-    // Current implementaion only supports the case when Ks < 256
-    // so that each element of the code must be unsigned char
-    assert(Ks <= 256);
+    if (256 < Ks) {
+        std::cerr << "Error. Ks is too large. "
+                  << "Currently, we support PQ code with Ks <= 256 "
+                  << "so that each subspace is represented by unsigned char (8 bit)"
+                  << std::endl;
+        throw;
+    }
 
     // Compute distance-matrices among codewords
     distance_matrices_among_codewords_.resize(
@@ -31,6 +35,7 @@ PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int
 
 int PQKMeans::predict_one(const std::vector<unsigned char> &pyvector)
 {
+    assert(pyvector.size() == M_);
     std::pair<std::size_t, float> nearest_one = FindNearetCenterLinear(pyvector, centers_);
     return (int) nearest_one.first;
 }
@@ -63,7 +68,9 @@ void PQKMeans::fit(const std::vector<std::vector<unsigned char> > &pydata) {
     std::vector<double> errors(N, 0);
 
     for (int itr = 0; itr < itr_; ++itr) {
-        std::cout << "Iteration start: " << itr << " / " << itr_ << std::endl;
+        if (verbose_) {
+            std::cout << "Iteration start: " << itr << " / " << itr_ << std::endl;
+        }
         auto start = std::chrono::system_clock::now(); // ---- timer start ---
 
         centers_old = centers_new;
@@ -87,10 +94,12 @@ void PQKMeans::fit(const std::vector<std::vector<unsigned char> > &pydata) {
             error_sum += errors[n];
         }
 
-        std::cout << "find_nn finished. Error: " << error_sum / N << std::endl;
-        std::cout << "find_nn_time,"
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count()
-                  << std::endl;
+        if (verbose_) {
+            std::cout << "find_nn finished. Error: " << error_sum / N << std::endl;
+            std::cout << "find_nn_time,"
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count()
+                      << std::endl;
+        }
 
         // (3) Compute centers
         if (itr != itr_ - 1) {
@@ -99,17 +108,20 @@ void PQKMeans::fit(const std::vector<std::vector<unsigned char> > &pydata) {
 
             for (int k = 0; k < K_; ++k) {
                 if (selected_indices_foreach_center[k].empty()) {
-                    std::cout << "Caution. No codes are assigned to " << k << "-th centers." << std::endl;
+                    if (verbose_) {
+                        std::cout << "Caution. No codes are assigned to " << k << "-th centers." << std::endl;
+                    }
                     continue;
                 }
-                centers_new[k] = ComputeCenterBySparseVoting(pydata,
-                                                                 selected_indices_foreach_center[k]);
-
+                centers_new[k] =
+                        ComputeCenterBySparseVoting(pydata, selected_indices_foreach_center[k]);
             }
         }
-        std::cout << "find_nn+update_center_time,"
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count()
-                  << std::endl;
+        if (verbose_) {
+            std::cout << "find_nn+update_center_time,"
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count()
+                      << std::endl;
+        }
 
     }
     centers_ = centers_new;
