@@ -1,3 +1,3 @@
-from . import encoder
-from . import clustering
-from . import evaluation
+from pqkmeans import encoder
+from pqkmeans import clustering
+from pqkmeans import evaluation

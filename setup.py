@@ -8,10 +8,31 @@ from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
+
+def requirements():
+    list_requirements = []
+    with open('requirements.txt') as f:
+        for line in f:
+            if line.find("git") == -1:
+                list_requirements.append(line.rstrip())
+    return list_requirements
+
+
+def dependencies():
+    list_requirements = []
+    with open('requirements.txt') as f:
+        for line in f:
+            if line.find("git") >= 0:
+                list_requirements.append(line.rstrip())
+    print(list_requirements)
+    return list_requirements
+
+
 class CMakeExtension(Extension):
     """
     @see https://github.com/pybind/cmake_example/blob/master/setup.py
     """
+
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
@@ -21,6 +42,7 @@ class CMakeBuild(build_ext):
     """
     @see https://github.com/pybind/cmake_example/blob/master/setup.py
     """
+
     def run(self):
         try:
             out = subprocess.check_output(['cmake', '--version'])
@@ -61,6 +83,7 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
+
 setup(
     name='pqkmeans',
     version='0.0.1',
@@ -68,9 +91,14 @@ setup(
     author_email='',
     description='',
     long_description='',
-    packages=["pqkmeans"],
+    install_requires=requirements(),
+    dependency_links=dependencies(),
+    # dependency_links=[
+    #     "git+https://github.com/Hi-king/read_texmex_dataset_python.git#egg=read_texmex_dataset_python-1.0"
+    # ],
+    packages=find_packages(),
     ext_modules=[CMakeExtension('_pqkmeans')],
     cmdclass=dict(build_ext=CMakeBuild),
-    test_suite = 'test',
+    test_suite='test',
     zip_safe=False,
 )

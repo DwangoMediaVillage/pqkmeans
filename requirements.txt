@@ -2,4 +2,5 @@ numpy
 scikit-learn
 pipe
 scipy
-git+https://github.com/Hi-king/read_texmex_dataset_python.git
+git+https://github.com/Hi-king/read_texmex_dataset_python.git#egg=texmex_python-0.0.1
+texmex_python
