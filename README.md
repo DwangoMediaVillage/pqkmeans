@@ -7,11 +7,11 @@ high-dimensional vectors.
 Similar to k-means, PQk-means repeats the assignment and update steps,
 both of which can be performed in the PQ-code domain.
 
-For a comparison, we also provide the ITQ encoding for the binary conversion and 
+For a comparison, we provide the ITQ encoding for the binary conversion and 
 [Binary k-means [Gong+, CVPR 15]](http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Gong_Web_Scale_Photo_2015_CVPR_paper.html) for the clustering of binary codes.
 
 The library is written in C++ for the main algorithm with wrappers for Python.
-All encoding/clustering codes are implemented based on the sklearn design.
+All encoding/clustering codes are compatible with scikit-learn.
 
 ## Installation
 ### Requisites
@@ -31,17 +31,18 @@ pip install -r requirements.txt
 python setup.py build
 ```
 
-## Test
-```
-python setup.py test
-```
-
 ## Install
 ```
 python setup.py install
 ```
 
-[todo] The above building&installation is OK?
+## Run samples
+
+## Test
+```
+python setup.py test
+```
+
 
 
 ## Usage
@@ -93,6 +94,7 @@ aaa
 ## Todo
 - Evaluation script for billion-scale data
 - Nearest neighbor search with PQTable
+- References
 
 [todo] other todo?
 
