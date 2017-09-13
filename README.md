@@ -32,7 +32,9 @@ All encoding/clustering codes are compatible with scikit-learn.
 - CMake
     - `brew install cmake` for OS X
     - `sudo apt install cmake` for Ubuntu
-    
+- OpenMP (Optional)
+    - If openmp is installed, it will automatically used to parallelize the algorithm for faster calculation.
+
 ### Build & install
 You can install the library by one line
 ```
