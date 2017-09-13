@@ -63,7 +63,7 @@ class ITQEncoder(EncoderBase):
     def fit(self, x_train):
         # type: (numpy.array) -> None
         assert len(x_train.shape) == 2
-        assert x_train.shape[1] >= self.num_bit, "target dimention should be larger than input dimention"
+        assert x_train.shape[1] >= self.num_bit, "target dimension should be larger than input dimension"
         data_preprocessed, pca = self.__preprocess(x_train, self.num_bit)
         R = self.__fit(data_preprocessed, self.num_bit, self.iteration)
         self.trained_encoder = self.TrainedITQEncoder(R, pca, self.num_bit)

@@ -4,8 +4,8 @@
 #include "./bkmeans.h"
 
 namespace pqkmeans {
-BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, unsigned int iteration, bool verbose) {
-    switch (dimention) {
+BKMeans::BKMeans(unsigned int k, unsigned int dimension, unsigned int subspace, unsigned int iteration, bool verbose) {
+    switch (dimension) {
         case 8:
             switch (subspace) {
                 case 2:
@@ -17,8 +17,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -38,8 +38,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -62,8 +62,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -89,8 +89,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -116,8 +116,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -143,8 +143,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -170,8 +170,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -197,8 +197,8 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
                 default:
                     std::ostringstream msg;
                     msg
-                    << "(dimention, subspace) = ("
-                    << dimention << "," << subspace
+                    << "(dimension, subspace) = ("
+                    << dimension << "," << subspace
                     << " ) is not supported";
                     throw msg.str();
                     break;
@@ -206,7 +206,7 @@ BKMeans::BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, 
             break;
         default:
             std::ostringstream msg;
-            msg << "dimention : " << dimention << " is not supported";
+            msg << "dimension : " << dimension << " is not supported";
             throw msg.str();
     }
 }

@@ -6,13 +6,13 @@ import tarfile
 import texmex_python
 
 
-def get_gmm_random_dataset(k, dimention=100, test_size=5000, train_size=500):
+def get_gmm_random_dataset(k, dimension=100, test_size=5000, train_size=500):
     def random_gmm(k, n_sample):
-        result = numpy.zeros((n_sample, dimention))
+        result = numpy.zeros((n_sample, dimension))
         for _ in range(k):
-            cov_source = numpy.random.random((dimention, dimention))
+            cov_source = numpy.random.random((dimension, dimension))
             cov = cov_source.dot(cov_source.T)
-            result += numpy.random.multivariate_normal(numpy.random.random(dimention), cov, n_sample)
+            result += numpy.random.multivariate_normal(numpy.random.random(dimension), cov, n_sample)
         return result
 
     train_test = random_gmm(k, train_size + test_size)

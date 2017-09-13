@@ -23,7 +23,7 @@ class BKMeans {
 private:
     std::unique_ptr<IBKmeansInternal> bKmeansInternal_;
 public:
-    BKMeans(unsigned int k, unsigned int dimention, unsigned int subspace, unsigned int iteration,
+    BKMeans(unsigned int k, unsigned int dimension, unsigned int subspace, unsigned int iteration,
             bool verbose = false);
 
     int predict_one(const std::vector<unsigned int> &pyvector);
