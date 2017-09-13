@@ -45,6 +45,14 @@ python setup.py install
 ```
 ## Run samples
 
+
+```
+# with aritficial data
+python bin/run_experiment.py --dataset artificial --algorithm bkmeans pqkmeans --k 100
+# with texmex dataset (http://corpus-texmex.irisa.fr/)
+python bin/run_experiment.py --dataset siftsmall --algorithm bkmeans pqkmeans --k 100
+```
+
 ## Test
 ```
 python setup.py test
