@@ -17,8 +17,8 @@ All encoding/clustering codes are compatible with scikit-learn.
 
 ## Summary of features
 - Approximation of k-means
-- 10 - 1000x faster than k-means
-- 100 - 4000x more memory efficient than k-means
+- Hundreds times faster than k-means
+- Hundreds times more memory efficient than k-means
 - Compatible with scikit-learn
 - Portable; one-line installation
 
@@ -86,6 +86,8 @@ For Bk-means
 ```python
 aaa
 ```
+## Note
+- This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repo and the pure c++ implementation used in the paper.
 
 
 ## Authors
@@ -111,7 +113,7 @@ aaa
 - Nearest neighbor search with PQTable
 - References
 
-[todo] other todo?
+
 
 
 # pqkmeans-private
