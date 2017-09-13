@@ -17,24 +17,31 @@ All encoding/clustering codes are implemented based on the sklearn design.
 ### Requisites
 - CMake
     - `brew install cmake` for OS X
-    - `sudo apt-get install cmake` for Ubuntu
+    - `sudo apt install cmake` for Ubuntu
 
 [todo] other requisites?
 
-### Build & install
+### Build
 ```
 git clone https://github.com/DwangoMediaVillage/pqkmeans.git
+cd pqkmeans
 git submodule init
 git submodule update
 pip install -r requirements.txt
-python setup.py install
+python setup.py build
 ```
-[todo] The above building&installation is OK?
 
 ## Test
 ```
 python setup.py test
 ```
+
+## Install
+```
+python setup.py install
+```
+
+[todo] The above building&installation is OK?
 
 
 ## Usage
