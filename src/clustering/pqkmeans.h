@@ -42,7 +42,7 @@ private:
     bool verbose_;
 
     std::vector<std::vector<unsigned char>> centers_;  // centers for clustering.
-    std::vector<int> assignments_;  // assignement for each intpu vector
+    std::vector<int> assignments_;  // assignement for each intput vector
 
 
     // [m][k1][k2]: m-th subspace, the L2 squared distance between k1-th and k2-th codewords
@@ -55,8 +55,8 @@ private:
                             const std::vector<float> &vec2);
 
     void InitializeCentersByRandomPicking(const std::vector<std::vector<unsigned char>> &codes,
-                                            int K,
-                                            std::vector<std::vector<unsigned char>> *centers_);
+                                          int K,
+                                          std::vector<std::vector<unsigned char>> *centers_);
 
     // Linear search by Symmetric Distance computation. Return the best one (id, distance)
     std::pair<std::size_t, float> FindNearetCenterLinear(const std::vector<unsigned char> &query,
@@ -65,7 +65,7 @@ private:
     // Compute a new cluster center from assigned codes. codes: All N codes. selected_ids: selected assigned ids.
     // e.g., If selected_ids=[4, 25, 13], then codes[4], codes[25], and codes[13] are averaged by the proposed sparse voting scheme.
     std::vector<unsigned char> ComputeCenterBySparseVoting(const std::vector<std::vector<unsigned char>> &codes,
-                                                             const std::vector<std::size_t> &selected_ids);
+                                                           const std::vector<std::size_t> &selected_ids);
 
 };
 

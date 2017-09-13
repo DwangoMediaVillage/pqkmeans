@@ -14,10 +14,10 @@ class TestPQKMeans(unittest.TestCase):
         self.encoder.fit(numpy.array(list(self.data_source(200))))
 
     def test_just_construction(self):
-        pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=True)
+        pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=False)
 
     def test_fit_and_predict(self):
-        engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=2, iteration=10, verbose=True)
+        engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=2, iteration=10, verbose=False)
         codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
         predicted = engine.fit_predict(codes)
 
@@ -34,7 +34,7 @@ class TestPQKMeans(unittest.TestCase):
 
 
     def test_cluster_centers_are_really_nearest(self):
-        engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=2, iteration=10, verbose=True)
+        engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=2, iteration=10, verbose=False)
         codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
         fit_predicted = engine.fit_predict(codes)
         cluster_centers = numpy.array(engine.cluster_centers_, dtype=numpy.uint8)

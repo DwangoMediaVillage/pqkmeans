@@ -54,14 +54,14 @@ class PQEncoder(EncoderBase):
         self.trained_encoder = self.TrainedPQEncoder(codewords, self.code_dtype)
 
     def transform_generator(self, x_test: typing.Iterable[typing.Iterator[float]]):
-        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using thie method."
+        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using this method."
         return self._buffered_process(x_test, self.trained_encoder.encode_multi)
 
     def inverse_transform_generator(self, x_test: typing.Iterable[typing.Iterator[int]]):
-        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using thie method."
+        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using this method."
         return self._buffered_process(x_test, self.trained_encoder.decode_multi)
 
     @property
     def codewords(self):
-        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using thie method."
+        assert self.trained_encoder is not None, "This PQEncoder instance is not fitted yet. Call 'fit' with appropriate arguments before using this method."
         return self.trained_encoder.codewords
