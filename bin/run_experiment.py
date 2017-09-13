@@ -10,13 +10,15 @@ import argparse
 ALL_ALGORITHMS = ["kmeans", "pqkmeans", "bkmeans", "random"]
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset", default="siftsmall", choices=["siftsmall", "random"])
+parser.add_argument("--dataset", default="siftsmall", choices=["siftsmall", "sift1m", "random"])
 parser.add_argument("--algorithms", default=ALL_ALGORITHMS, nargs="+", choices=ALL_ALGORITHMS)
 parser.add_argument("--k", default=5, type=int)
 args = parser.parse_args()
 
 if args.dataset == "siftsmall":
     learn_data, test_data = pqkmeans.evaluation.get_siftsmall_dataset()
+elif args.dataset == "sift1m":
+    learn_data, test_data = pqkmeans.evaluation.get_sift1m_dataset()
 elif args.dataset == "random":
     learn_data, test_data = pqkmeans.evaluation.get_gmm_random_dataset(k=args.k)
 else:

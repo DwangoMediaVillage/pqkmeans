@@ -5,6 +5,7 @@ import six.moves.urllib
 import tarfile
 import texmex_python
 
+
 def get_gmm_random_dataset(k, dimention=100, test_size=5000, train_size=500):
     def random_gmm(k, n_sample):
         result = numpy.zeros((n_sample, dimention))
@@ -14,18 +15,31 @@ def get_gmm_random_dataset(k, dimention=100, test_size=5000, train_size=500):
             result += numpy.random.multivariate_normal(numpy.random.random(dimention), cov, n_sample)
         return result
 
-    train_test = random_gmm(k, train_size+test_size)
+    train_test = random_gmm(k, train_size + test_size)
     train = train_test[:train_size, :]
     test = train_test[train_size:, :]
     return train, test
 
 
-def get_siftsmall_dataset():
-    url = "ftp://ftp.irisa.fr/local/texmex/corpus/siftsmall.tar.gz"
-    filename = "siftsmall.tar.gz"
-    directory = "."
-    member_names = ["siftsmall/siftsmall_learn.fvecs", "siftsmall/siftsmall_base.fvecs"]
-    path = os.path.join(directory, filename)
+def get_siftsmall_dataset(cache_directory="."):
+    return get_texmex_dataset(
+        url="ftp://ftp.irisa.fr/local/texmex/corpus/siftsmall.tar.gz",
+        filename="siftsmall.tar.gz",
+        member_names=["siftsmall/siftsmall_learn.fvecs", "siftsmall/siftsmall_base.fvecs"],
+        cache_directory=cache_directory,
+    )
+
+def get_sift1m_dataset(cache_directory="."):
+    return get_texmex_dataset(
+        url="ftp://ftp.irisa.fr/local/texmex/corpus/sift.tar.gz",
+        filename="sift.tar.gz",
+        member_names=["sift/sift_learn.fvecs", "sift/sift_base.fvecs"],
+        cache_directory=cache_directory,
+    )
+
+
+def get_texmex_dataset(url, filename, member_names, cache_directory="."):
+    path = os.path.join(cache_directory, filename)
     if not os.path.exists(path):
         print("downloading {}".format(url))
         six.moves.urllib.request.urlretrieve(url, path)
