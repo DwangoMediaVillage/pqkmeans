@@ -17,8 +17,8 @@ All encoding/clustering codes are compatible with scikit-learn.
 
 ## Summary of features
 - Approximation of k-means
-- Hundreds times faster than k-means
-- Hundreds times more memory efficient than k-means
+- Tens to hundreds of times faster than k-means
+- Tens to hundreds of times more memory efficient than k-means
 - Compatible with scikit-learn
 - Portable; one-line installation
 
