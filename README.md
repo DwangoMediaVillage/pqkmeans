@@ -17,7 +17,7 @@ both of which can be performed in the PQ-code domain.
 For a comparison, we provide the ITQ encoding for the binary conversion and 
 [Binary k-means [Gong+, CVPR 15]](http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Gong_Web_Scale_Photo_2015_CVPR_paper.html) for the clustering of binary codes.
 
-The library is written in C++ for the main algorithm with wrappers for Python.
+The library is written in C++ for the main algorithm with wrappers for Python. 
 All encoding/clustering codes are compatible with scikit-learn.
 
 ## Summary of features
@@ -36,7 +36,7 @@ All encoding/clustering codes are compatible with scikit-learn.
 ### Build & install
 You can install the library by one line
 ```
-pip install --process-dependency-links git+https://github.com/DwangoMediaVillage/pqkmeans.git
+pip install --process-dependency-links git+https://github.com/DwangoMediaVillage/pqkmeans.git 
 ```
 Or, equivalently, you can build and install the library one by one
 ```
@@ -73,18 +73,22 @@ import pqkmeans
 import numpy as np
 X = np.random.random((1000, 100)) # 100 dimensional 1000 samples
 
-# Train a PQ encoder
-encoder = pqkmeans.encoder.PQEncoder(num_subdim=2)
+# Train a PQ encoder.
+# Each vector is devided into 4 parts and each part is
+# encoded with log256 = 8 bit, resulting in a 32 bit PQ code.
+encoder = pqkmeans.encoder.PQEncoder(num_subdim=4, Ks=256)
 encoder.fit(X)
 
-# Convert input vectors to PQ codes
+# Convert input vectors to 32-bit PQ codes, where each PQ code consists of four uint8.
+# You can train the encoder and
+# transform the input vectors to PQ codespreliminary.
 X_pqcode = encoder.transform(X)
 
-# Run clustering
+# Run clustering with k=5 clusters.
 kmeans = pqkmeans.clustering.PQKMeans(encoder=encoder, k=5)
-clusterd = kmeans.fit_predict(X_pqcode)
+clustered = kmeans.fit_predict(X_pqcode)
 ```
-Then, `clusterd[0]` is the id of assigned centor for the first input code (`X_pqcode[0]`).
+Then, `clustered[0]` is the id of assigned center for the first input PQ code (`X_pqcode[0]`).
 
 ### For Bk-means
 
@@ -109,8 +113,7 @@ clustered = kmeans.fit_predict(X_itq)
 
 ## Note
 - This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repository and the pure c++ implementation used in the paper.
-- We tested this library with Python3, on OS X and Ubuntu 16.04.
-
+- We tested this library with Python3, on OS X and Ubuntu 16.04. 
 
 ## Authors
 - [Keisuke Ogaki](https://github.com/kogaki) designed the whole structure of the library, and implemented most of the Bk-means clustering
