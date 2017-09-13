@@ -66,7 +66,7 @@ python setup.py test
 ```python
 import pqkmeans
 import numpy as np
-X = np.random.random((1000, 100))
+X = np.random.random((1000, 100)) # 100 dimentional 1000 samples
 
 # Train a PQ encoder
 encoder = pqkmeans.encoder.PQEncoder(num_subdim = 2)
@@ -88,16 +88,16 @@ In almost the same manner as PQk-means,
 ```python
 import pqkmeans
 import numpy as np
+X = np.random.random((1000, 100)) # 100 dimentional 1000 samples
 
-pqkmeans.encoder.ITQEncoder(num_bit=32)
-
+# Train a ITQ binary encoder
 encoder = pqkmeans.encoder.ITQEncoder(num_bit=32)
-
-X = np.random.random((1000, 100))
-
 encoder.fit(X)
+
+# Convert input vectors to binary codes
 X_itq = encoder.transform(X)
 
+# Run clustering
 kmeans = pqkmeans.clustering.BKMeans(k=5, input_dim=32)
 clustered = kmeans.fit_predict(X_itq)
 ```
