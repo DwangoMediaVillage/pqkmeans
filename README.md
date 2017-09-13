@@ -61,31 +61,47 @@ python setup.py test
 
 
 ## Usage
-For PQk-means
+### For PQk-means
+
 ```python
-from pqkmeans encoder import *
-from pqkmeans clustering import *
+import pqkmeans
 import numpy as np
-# [todo] can we include a one line script to download siftsmall?
-X = np.array([[1, 2], [1, 4], [1, 0], [4, 2], [4, 4], [4, 0])
+X = np.random.random((1000, 100))
 
 # Train a PQ encoder
-encoder = PQEncoder(num_dim = 2)
+encoder = pqkmeans.encoder.PQEncoder(num_subdim = 2)
 encoder.fit(X)
 
 # Convert input vectors to PQ codes
 X_pqcode = encoder.transform(X)
 
 # Run clustering
-kmeans = PQKmeans(encoder=encoder, k=5)
-clusterd = kmeans.fit_predicted(X_pqcode)
+kmeans = pqkmeans.clustering.PQKMeans(encoder=encoder, k=5)
+clusterd = kmeans.fit_predict(X_pqcode)
 ```
 Then, `clusterd[0]` is the id of assigned centroid for the first input code (`X_pqcode[0]`).
 
-For Bk-means
+### For Bk-means
+
+In almost the same manner as PQk-means,
+
 ```python
-aaa
+import pqkmeans
+import numpy as np
+
+pqkmeans.encoder.ITQEncoder(num_bit=32)
+
+encoder = pqkmeans.encoder.ITQEncoder(num_bit=32)
+
+X = np.random.random((1000, 100))
+
+encoder.fit(X)
+X_itq = encoder.transform(X)
+
+kmeans = pqkmeans.clustering.BKMeans(k=5, input_dim=32)
+clustered = kmeans.fit_predict(X_itq)
 ```
+
 ## Note
 - This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repo and the pure c++ implementation used in the paper.
 
