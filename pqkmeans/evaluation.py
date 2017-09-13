@@ -5,7 +5,7 @@ import six.moves.urllib
 import tarfile
 import texmex_python
 
-def get_gmm_random_dataset(dimention=100, test_size=5000, train_size=500):
+def get_gmm_random_dataset(k, dimention=100, test_size=5000, train_size=500):
     def random_gmm(k, n_sample):
         result = numpy.zeros((n_sample, dimention))
         for _ in range(k):
@@ -14,7 +14,7 @@ def get_gmm_random_dataset(dimention=100, test_size=5000, train_size=500):
             result += numpy.random.multivariate_normal(numpy.random.random(dimention), cov, n_sample)
         return result
 
-    train_test = random_gmm(5, train_size+test_size)
+    train_test = random_gmm(k, train_size+test_size)
     train = train_test[:train_size, :]
     test = train_test[train_size:, :]
     return train, test
@@ -35,7 +35,6 @@ def get_siftsmall_dataset():
         tardir = tarfile.open(path, "r:gz")
         member = tardir.getmember(member_name)
         data = texmex_python.reader.read_fvec(tardir.extractfile(member))
-        print(data.shape)
         learn_base.append(data)
     return learn_base
 

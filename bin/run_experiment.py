@@ -15,11 +15,10 @@ parser.add_argument("--algorithms", default=ALL_ALGORITHMS, nargs="+", choices=A
 parser.add_argument("--k", default=5, type=int)
 args = parser.parse_args()
 
-
 if args.dataset == "siftsmall":
     learn_data, test_data = pqkmeans.evaluation.get_siftsmall_dataset()
-if args.dataset == "random":
-    learn_data, test_data = pqkmeans.evaluation.get_gmm_random_dataset()
+elif args.dataset == "random":
+    learn_data, test_data = pqkmeans.evaluation.get_gmm_random_dataset(k=args.k)
 else:
     raise Exception("no such dataset: {}".format(args.dataset))
 
@@ -40,7 +39,7 @@ for algorithm in args.algorithms:
         kmeans = pqkmeans.clustering.BKMeans(k=args.k, input_dim=32, subspace_dim=8, iteration=10)
         predicted = kmeans.fit_predict(coded)
     elif algorithm == "random":
-        predicted = [numpy.random.randint(0, args.k - 1) for _ in range(len(predicted))]
+        predicted = [numpy.random.randint(0, args.k - 1) for _ in range(len(test_data))]
     else:
         raise Exception("no such algorithm: {}".format(algorithm))
 
