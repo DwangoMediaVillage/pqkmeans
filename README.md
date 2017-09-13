@@ -1,5 +1,10 @@
 # PQk-means
 
+
+A 2D example using both k-means and PQk-means | Large-scale evaluation
+:---:|:---:
+![](http://yusukematsui.me/project/pqkmeans/img/teaser.png)  |  ![](http://yusukematsui.me/project/pqkmeans/img/eval.png )
+
 [PQk-means [Matsui, Ogaki, Yamasaki, and Aizawa, ACMMM 17]](http://yusukematsui.me/project/pqkmeans/pqkmeans.html) is a Python library for efficient clustering of large-scale data.
 By first compressing input vectors into short product-quantized (PQ) codes,
 PQk-means achieves fast and memory-efficient clustering, even for
@@ -12,7 +17,7 @@ both of which can be performed in the PQ-code domain.
 For a comparison, we provide the ITQ encoding for the binary conversion and 
 [Binary k-means [Gong+, CVPR 15]](http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Gong_Web_Scale_Photo_2015_CVPR_paper.html) for the clustering of binary codes.
 
-The library is written in C++ for the main algorithm with wrappers for Python.
+The library is written in C++ for the main algorithm with wrappers for Python3.
 All encoding/clustering codes are compatible with scikit-learn.
 
 ## Summary of features
@@ -66,10 +71,10 @@ python setup.py test
 ```python
 import pqkmeans
 import numpy as np
-X = np.random.random((1000, 100)) # 100 dimentional 1000 samples
+X = np.random.random((1000, 100)) # 100 dimensional 1000 samples
 
 # Train a PQ encoder
-encoder = pqkmeans.encoder.PQEncoder(num_subdim = 2)
+encoder = pqkmeans.encoder.PQEncoder(num_subdim=2)
 encoder.fit(X)
 
 # Convert input vectors to PQ codes
@@ -79,7 +84,7 @@ X_pqcode = encoder.transform(X)
 kmeans = pqkmeans.clustering.PQKMeans(encoder=encoder, k=5)
 clusterd = kmeans.fit_predict(X_pqcode)
 ```
-Then, `clusterd[0]` is the id of assigned centroid for the first input code (`X_pqcode[0]`).
+Then, `clusterd[0]` is the id of assigned centor for the first input code (`X_pqcode[0]`).
 
 ### For Bk-means
 
@@ -88,7 +93,7 @@ In almost the same manner as PQk-means,
 ```python
 import pqkmeans
 import numpy as np
-X = np.random.random((1000, 100)) # 100 dimentional 1000 samples
+X = np.random.random((1000, 100)) # 100 dimensional 1000 samples
 
 # Train a ITQ binary encoder
 encoder = pqkmeans.encoder.ITQEncoder(num_bit=32)
@@ -103,7 +108,7 @@ clustered = kmeans.fit_predict(X_itq)
 ```
 
 ## Note
-- This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repo and the pure c++ implementation used in the paper.
+- This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repository and the pure c++ implementation used in the paper.
 
 
 ## Authors
