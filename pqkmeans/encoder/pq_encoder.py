@@ -45,6 +45,7 @@ class PQEncoder(EncoderBase):
         assert self.Ks < N, "the number of training vector should be more than Ks"
         assert D % self.M == 0, "input dimension must be dividable by M"
         self.Ds = int(D / self.M)
+        assert self.trained_encoder is None, "fit must be called only once"
 
         codewords = numpy.zeros((self.M, self.Ks, self.Ds), dtype=numpy.float)
         for m in range(self.M):
