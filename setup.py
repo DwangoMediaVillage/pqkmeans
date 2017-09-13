@@ -85,9 +85,9 @@ class CMakeBuild(build_ext):
 
 setup(
     name='pqkmeans',
-    version='0.0.1',
-    author='',
-    author_email='',
+    version='1.0.0',
+    author='Keisuke Ogaki, Yusuke Matsui',
+    author_email='keisuke_ogaki@dwango.co.jp, matsui528@gmail.com',
     description='',
     long_description='',
     install_requires=requirements(),
