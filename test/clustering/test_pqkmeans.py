@@ -20,4 +20,7 @@ class TestPQKMeans(unittest.TestCase):
         print("fit_and_predict")
         engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=True)
         codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
-        engine.fit(codes)
+        print("imakara")
+        predicted = engine.fit_predict(codes)
+        print("predict suruo")
+        print(predicted)
