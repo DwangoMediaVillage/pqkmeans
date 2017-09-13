@@ -1,6 +1,6 @@
 # PQk-means
 
-PQk-means is a Python library for efficient clustering of large-scale data.
+[PQk-means [Matsui, Ogaki, Yamasaki, and Aizawa, ACMMM 17]](http://yusukematsui.me/project/pqkmeans/pqkmeans.html) is a Python library for efficient clustering of large-scale data.
 By first compressing input vectors into short product-quantized (PQ) codes,
 PQk-means achieves fast and memory-efficient clustering, even for
 high-dimensional vectors.
@@ -13,13 +13,13 @@ For a comparison, we also provide the ITQ encoding for the binary conversion and
 The library is written in C++ for the main algorithm with wrappers for Python.
 All encoding/clustering codes are implemented based on the sklearn design.
 
-
-
-## Install
+## Installation
 ### Requisites
 - CMake
     - `brew install cmake` for OS X
     - `sudo apt-get install cmake` for Ubuntu
+
+[todo] other requisites?
 
 ### Build & install
 ```
@@ -29,6 +29,7 @@ git submodule update
 pip install -r requirements.txt
 python setup.py install
 ```
+[todo] The above building&installation is OK?
 
 ## Test
 ```
@@ -76,7 +77,18 @@ aaa
         booktitle = {ACM International Conference on Multimedia (ACMMM)},
         year = {2017},
     }
- 
+
+## Links
+- [Paper](https://arxiv.org/abs/1709.03708)
+- [Project page](http://yusukematsui.me/project/pqkmeans/pqkmeans.html)
+
+
+## Todo
+- Evaluation script for billion-scale data
+- Nearest neighbor search with PQTable
+
+[todo] other todo?
+
 
 # pqkmeans-private
 
