@@ -14,10 +14,12 @@ class TestBKMeans(unittest.TestCase):
 
     def test_just_constuction(self):
         bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=32, subspace_dim=2)
+        bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=1024, subspace_dim=4)
 
     def test_invalid_construction(self):
         self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(10000, 1))
         self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(32, 100))
+        self.assertRaises(Exception, lambda: pqkmeans.clustering.BKMeans(input_dim=2048, subspace_dim=2))
 
     def test_fit_and_predict(self):
         bkmeans = pqkmeans.clustering.BKMeans(k=2, input_dim=32, subspace_dim=2)
