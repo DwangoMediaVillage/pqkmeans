@@ -10,7 +10,7 @@ class TestPQEncoder(unittest.TestCase):
                 yield [i * 100] * 6
 
     def setUp(self):
-        self.encoder = pqkmeans.encoder.PQEncoder(num_dim=2)
+        self.encoder = pqkmeans.encoder.PQEncoder(num_subdim=2)
 
     def test_just_train_array(self):
         input_array = numpy.random.random((300, 10))
