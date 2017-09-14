@@ -145,7 +145,7 @@ public:
 
         // critical section
 #pragma omp parallel for
-        for (unsigned int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < static_cast<int>(data.size()); i++) {
             assignments_.at(i) = FindNearestCentroid(data.at(i));
         }
         for (unsigned int i = 0; i < data.size(); i++) {
