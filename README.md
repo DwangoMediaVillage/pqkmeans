@@ -33,14 +33,14 @@ All encoding/clustering codes are compatible with scikit-learn.
     - `brew install cmake` for OS X
     - `sudo apt install cmake` for Ubuntu
 - OpenMP (Optional)
-    - If openmp is installed, it will automatically used to parallelize the algorithm for faster calculation.
+    - If openmp is installed, it will be automatically used to parallelize the algorithm for faster calculation.
 
 ### Build & install
-You can install the library by one line
+You can install the library in one line by:
 ```
 pip install --process-dependency-links git+https://github.com/DwangoMediaVillage/pqkmeans.git 
 ```
-Or, equivalently, you can build and install the library one by one
+Or, equivalently, you can manually build and install the library by:
 ```
 git clone https://github.com/DwangoMediaVillage/pqkmeans.git
 cd pqkmeans
@@ -93,14 +93,14 @@ Then, `clustered[0]` is the id of assigned center for the first input PQ code (`
 
 ### For Bk-means
 
-In almost the same manner as PQk-means,
+In almost the same manner as for PQk-means,
 
 ```python
 import pqkmeans
 import numpy as np
 X = np.random.random((1000, 100)) # 100 dimensional 1000 samples
 
-# Train a ITQ binary encoder
+# Train an ITQ binary encoder
 encoder = pqkmeans.encoder.ITQEncoder(num_bit=32)
 encoder.fit(X)
 
