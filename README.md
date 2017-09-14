@@ -40,7 +40,7 @@ You can install the library from PyPI:
 ```
 pip install pqkmeans
 ```
-Or, if you need to use current master version, you can manually build and install the library by:
+Or, if you would like to use the current master version, you can manually build and install the library by:
 ```
 git clone --recursive https://github.com/DwangoMediaVillage/pqkmeans.git
 cd pqkmeans
