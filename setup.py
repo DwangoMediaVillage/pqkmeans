@@ -13,17 +13,7 @@ def requirements():
     list_requirements = []
     with open('requirements.txt') as f:
         for line in f:
-            if line.find("git") == -1:
-                list_requirements.append(line.rstrip())
-    return list_requirements
-
-
-def dependencies():
-    list_requirements = []
-    with open('requirements.txt') as f:
-        for line in f:
-            if line.find("git") >= 0:
-                list_requirements.append(line.rstrip())
+            list_requirements.append(line.rstrip())
     return list_requirements
 
 
@@ -97,7 +87,6 @@ For a comparison, we provide the ITQ encoding for the binary conversion and Bina
 The library is written in C++ for the main algorithm with wrappers for Python. All encoding/clustering codes are compatible with scikit-learn.
     ''',
     install_requires=requirements(),
-    dependency_links=dependencies(),
     packages=find_packages(),
     ext_modules=[CMakeExtension('_pqkmeans')],
     cmdclass=dict(build_ext=CMakeBuild),
