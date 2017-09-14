@@ -82,7 +82,8 @@ void PQKMeans::fit(const std::vector<std::vector<unsigned char> > &pydata) {
         double error_sum = 0;
 
 #pragma omp parallel for
-        for(std::size_t n = 0; n < N; ++n) {
+        for(long long n_tmp = 0LL; n_tmp < static_cast<long long>(N); ++n_tmp) {
+            std::size_t n = static_cast<std::size_t>(n_tmp);
             std::pair<std::size_t, float> min_k_dist = FindNearetCenterLinear(pydata[n], centers_old);
             assignments_[n] = (int) min_k_dist.first;
             errors[n] = min_k_dist.second;
