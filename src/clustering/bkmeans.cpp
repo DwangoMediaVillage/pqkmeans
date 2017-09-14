@@ -1,5 +1,3 @@
-//
-
 #include <bitset>
 #include "./bkmeans.h"
 

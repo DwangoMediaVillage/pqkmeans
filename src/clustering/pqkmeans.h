@@ -12,25 +12,17 @@
 
 namespace pqkmeans {
 
-//namespace PQKmeansUtil {
-//enum class InitCenterType {
-//    RandomPick, Outer
-//};
-//enum class FindNNType {
-//    Table,  Linear, Auto
-//};
-//}
-
-
 
 class PQKMeans {
 public:
     PQKMeans(std::vector<std::vector<std::vector<float>>> codewords, int K, int itr, bool verbose);
 
     int predict_one(const std::vector<unsigned char> &pyvector);
+
     void fit(const std::vector<std::vector<unsigned char>> &pydata);
 
     const std::vector<int> GetAssignments();
+
     std::vector<std::vector<unsigned char>> GetClusterCenters();
 
 

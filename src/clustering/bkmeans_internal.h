@@ -1,5 +1,3 @@
-//
-
 #ifndef PQKMEANS_BKMEANS_INTERNAL_H
 #define PQKMEANS_BKMEANS_INTERNAL_H
 
@@ -145,11 +143,11 @@ public:
             count.push_back(std::vector<long>(N));
         }
 
+        // critical section
 #pragma omp parallel for
         for (unsigned int i = 0; i < data.size(); i++) {
             assignments_.at(i) = FindNearestCentroid(data.at(i));
         }
-        // critical section
         for (unsigned int i = 0; i < data.size(); i++) {
             all_count[assignments_[i]] += 1;
             for (unsigned int d = 0; d < N; d++) {
@@ -270,14 +268,14 @@ private:
         for (unsigned int target_bit = 0; target_bit < num_bits + 1; target_bit++) {
             std::vector<unsigned long> combinations;
             for (unsigned long num = 0; num < (unsigned long) (1 << num_bits); num++) {
-                if (BitCount(num, num_bits) == target_bit) combinations.push_back(num);
+                if (PopulationCount(num, num_bits) == target_bit) combinations.push_back(num);
             }
             ret.push_back(combinations);
         }
         return ret;
     }
 
-    unsigned int BitCount(unsigned long value, unsigned int num_bits) {
+    unsigned int PopulationCount(unsigned long value, unsigned int num_bits) {
         unsigned int count = 0;
         for (unsigned long mask = 1; mask < (unsigned long) (1 << num_bits); mask <<= 1) {
             if ((value & mask) != 0) count += 1;
@@ -285,7 +283,7 @@ private:
         return count;
     }
 
-    unsigned int BitCount(std::bitset<N> value) {
+    unsigned int PopulationCount(std::bitset<N> value) {
         return value.count();
     }
 
@@ -367,10 +365,8 @@ private:
     }
 
     unsigned int CalcDistance(const std::bitset<N> &a, const std::bitset<N> &b) {
-        return BitCount(a ^ b);
+        return PopulationCount(a ^ b);
     }
-
-
 };
 }
 

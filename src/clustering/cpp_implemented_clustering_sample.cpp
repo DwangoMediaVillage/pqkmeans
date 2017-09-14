@@ -1,7 +1,6 @@
-//
-
 #include <cmath>
 #include <numeric>
+#include <cassert>
 #include "cpp_implemented_clustering_sample.h"
 
 namespace pqkmeans {

@@ -1,5 +1,3 @@
-//
-
 #ifndef PQKMEANS_BKMEANS_H
 #define PQKMEANS_BKMEANS_H
 

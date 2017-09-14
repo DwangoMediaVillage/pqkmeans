@@ -3,7 +3,6 @@
 #ifndef PQKMEANS_NATIVECLUSTERINGSAMPLE_H
 #define PQKMEANS_NATIVECLUSTERINGSAMPLE_H
 
-#include <cassert>
 #include <vector>
 
 namespace pqkmeans {
