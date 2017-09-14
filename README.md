@@ -42,12 +42,8 @@ pip install --process-dependency-links git+https://github.com/DwangoMediaVillage
 ```
 Or, equivalently, you can manually build and install the library by:
 ```
-git clone https://github.com/DwangoMediaVillage/pqkmeans.git
+git clone --recursive https://github.com/DwangoMediaVillage/pqkmeans.git
 cd pqkmeans
-git submodule init
-git submodule update
-pip install -r requirements.txt
-python setup.py build
 python setup.py install
 ```
 ## Run samples
