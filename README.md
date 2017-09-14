@@ -36,11 +36,11 @@ All encoding/clustering codes are compatible with scikit-learn.
     - If openmp is installed, it will be automatically used to parallelize the algorithm for faster calculation.
 
 ### Build & install
-You can install the library in one line by:
+You can install the library from PyPI:
 ```
-pip install --process-dependency-links git+https://github.com/DwangoMediaVillage/pqkmeans.git 
+pip install pqkmeans
 ```
-Or, equivalently, you can manually build and install the library by:
+Or, if you need to use current master version, you can manually build and install the library by:
 ```
 git clone --recursive https://github.com/DwangoMediaVillage/pqkmeans.git
 cd pqkmeans
