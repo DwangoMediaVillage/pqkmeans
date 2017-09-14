@@ -88,8 +88,14 @@ setup(
     version='1.0.0',
     author='Keisuke Ogaki, Yusuke Matsui',
     author_email='keisuke_ogaki@dwango.co.jp, matsui528@gmail.com',
-    description='',
-    long_description='',
+    license='MIT License',
+    url='http://yusukematsui.me/project/pqkmeans/pqkmeans.html',
+    description='Fast and memory-efficient clustering',
+    long_description='''
+PQk-means [Matsui, Ogaki, Yamasaki, and Aizawa, ACMMM 17] is a Python library for efficient clustering of large-scale data. By first compressing input vectors into short product-quantized (PQ) codes, PQk-means achieves fast and memory-efficient clustering, even for high-dimensional vectors. Similar to k-means, PQk-means repeats the assignment and update steps, both of which can be performed in the PQ-code domain.
+For a comparison, we provide the ITQ encoding for the binary conversion and Binary k-means [Gong+, CVPR 15] for the clustering of binary codes.
+The library is written in C++ for the main algorithm with wrappers for Python. All encoding/clustering codes are compatible with scikit-learn.
+    ''',
     install_requires=requirements(),
     dependency_links=dependencies(),
     packages=find_packages(),
