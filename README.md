@@ -1,9 +1,15 @@
 # PQk-means
 
+[**Project**](http://yusukematsui.me/project/pqkmeans/pqkmeans.html)
+| [**Paper**](https://arxiv.org/abs/1709.03708)
+| [**Tutorial**](https://github.com/DwangoMediaVillage/pqkmeans/tree/master/tutorial)
+
 
 A 2D example using both k-means and PQk-means | Large-scale evaluation
 :---:|:---:
 ![](http://yusukematsui.me/project/pqkmeans/img/teaser.png)  |  ![](http://yusukematsui.me/project/pqkmeans/img/eval.png )
+
+
 
 [PQk-means [Matsui, Ogaki, Yamasaki, and Aizawa, ACMMM 17]](http://yusukematsui.me/project/pqkmeans/pqkmeans.html) is a Python library for efficient clustering of large-scale data.
 By first compressing input vectors into short product-quantized (PQ) codes,
@@ -17,9 +23,6 @@ both of which can be performed in the PQ-code domain.
 For a comparison, we provide the ITQ encoding for the binary conversion and 
 [Binary k-means [Gong+, CVPR 15]](http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Gong_Web_Scale_Photo_2015_CVPR_paper.html) for the clustering of binary codes.
 
-The library is written in C++ for the main algorithm with wrappers for Python. 
-All encoding/clustering codes are compatible with scikit-learn.
-
 ## Summary of features
 - Approximation of k-means
 - Tens to hundreds of times faster than k-means
@@ -28,14 +31,14 @@ All encoding/clustering codes are compatible with scikit-learn.
 - Portable; one-line installation
 
 ## Installation
-### Requisites
+#### Requisites
 - CMake
     - `brew install cmake` for OS X
     - `sudo apt install cmake` for Ubuntu
 - OpenMP (Optional)
     - If openmp is installed, it will be automatically used to parallelize the algorithm for faster calculation.
 
-### Build & install
+#### Build & install
 You can install the library from PyPI:
 ```
 pip install pqkmeans
@@ -64,7 +67,7 @@ python setup.py test
 
 
 ## Usage
-### For PQk-means
+#### For PQk-means
 
 ```python
 import pqkmeans
@@ -84,10 +87,12 @@ X_pqcode = encoder.transform(X)
 # Run clustering with k=5 clusters.
 kmeans = pqkmeans.clustering.PQKMeans(encoder=encoder, k=5)
 clustered = kmeans.fit_predict(X_pqcode)
-```
-Then, `clustered[0]` is the id of assigned center for the first input PQ code (`X_pqcode[0]`).
 
-### For Bk-means
+# Then, clustered[0] is the id of assigned center for the first input PQ code (X_pqcode[0]).
+```
+
+
+#### For Bk-means
 
 In almost the same manner as for PQk-means,
 
@@ -110,6 +115,8 @@ clustered = kmeans.fit_predict(X_itq)
 
 ## Note
 - This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repository and the pure c++ implementation used in the paper.
+- The library is written in C++ for the main algorithm with wrappers for Python. 
+All encoding/clustering codes are compatible with scikit-learn.
 - We tested this library with Python3, on OS X and Ubuntu 16.04. 
 
 ## Authors
@@ -125,9 +132,7 @@ clustered = kmeans.fit_predict(X_itq)
         year = {2017},
     }
 
-## Links
-- [Paper](https://arxiv.org/abs/1709.03708)
-- [Project page](http://yusukematsui.me/project/pqkmeans/pqkmeans.html)
+
 
 
 ## Todo
