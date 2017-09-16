@@ -112,6 +112,7 @@ X_itq = encoder.transform(X)
 kmeans = pqkmeans.clustering.BKMeans(k=5, input_dim=32)
 clustered = kmeans.fit_predict(X_itq)
 ```
+Please see more examples on a [**tutorial**](https://github.com/DwangoMediaVillage/pqkmeans/tree/master/tutorial)
 
 ## Note
 - This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repository and the pure c++ implementation used in the paper.
@@ -138,4 +139,4 @@ All encoding/clustering codes are compatible with scikit-learn.
 ## Todo
 - Evaluation script for billion-scale data
 - Nearest neighbor search with PQTable
-- References
+- Documentation
