@@ -23,6 +23,9 @@ both of which can be performed in the PQ-code domain.
 For a comparison, we provide the ITQ encoding for the binary conversion and 
 [Binary k-means [Gong+, CVPR 15]](http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Gong_Web_Scale_Photo_2015_CVPR_paper.html) for the clustering of binary codes.
 
+The library is written in C++ for the main algorithm with wrappers for Python. 
+All encoding/clustering codes are compatible with scikit-learn.
+
 ## Summary of features
 - Approximation of k-means
 - Tens to hundreds of times faster than k-means
@@ -116,8 +119,6 @@ Please see more examples on a [**tutorial**](https://github.com/DwangoMediaVilla
 
 ## Note
 - This repository contains the re-implemented version of the PQk-means with the Python interface. There can be the difference between this repository and the pure c++ implementation used in the paper.
-- The library is written in C++ for the main algorithm with wrappers for Python. 
-All encoding/clustering codes are compatible with scikit-learn.
 - We tested this library with Python3, on OS X and Ubuntu 16.04. 
 
 ## Authors
