@@ -2,7 +2,7 @@
 
 [**Project**](http://yusukematsui.me/project/pqkmeans/pqkmeans.html)
 | [**Paper**](https://arxiv.org/abs/1709.03708)
-| [**Tutorial**](https://github.com/DwangoMediaVillage/pqkmeans/tree/master/tutorial)
+| [**Tutorial**](./tutorial)
 
 
 A 2D example using both k-means and PQk-means | Large-scale evaluation
