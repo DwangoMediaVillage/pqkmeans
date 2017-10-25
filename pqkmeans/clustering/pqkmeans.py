@@ -18,7 +18,7 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
     def fit(self, x_train):
         #type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> None
         assert len(x_train.shape) == 2
-        self._impl.fit(x_train)
+        self._impl.fit(x_train.reshape(-1)) # Convert to a long 1D array
 
     def predict(self, x_test):
         # type: (numpy.array) -> Any
