@@ -40,16 +40,19 @@ int PQKMeans::predict_one(const std::vector<unsigned char> &pyvector)
     return (int) nearest_one.first;
 }
 
-void PQKMeans::fit(const std::vector<std::vector<unsigned char> > &pydata) {
-    assert(K_ < (int) pydata.size());
-    std::size_t N = pydata.size();
+
+
+void PQKMeans::fit(const std::vector<unsigned char> &pydata) {
+    assert( (size_t) K_ * M_ < pydata.size());
+    assert(pydata.size() % M_ == 0);
+    std::size_t N = pydata.size() / M_;
 
     // Refresh
     centers_.clear();
     centers_.resize((std::size_t) K_, std::vector<unsigned char>(M_));
     assignments_.clear();
-    assignments_.resize(pydata.size());
-    assignments_.shrink_to_fit(); // If the previous fit mallocs a long assignment array, shrink it.
+    assignments_.resize(N);
+    assignments_.shrink_to_fit(); // If the previous fit malloced a long assignment array, shrink it.
 
     // Prepare data temporal buffer
     std::vector<std::vector<unsigned char>> centers_new, centers_old;
@@ -84,7 +87,7 @@ void PQKMeans::fit(const std::vector<std::vector<unsigned char> > &pydata) {
 #pragma omp parallel for
         for(long long n_tmp = 0LL; n_tmp < static_cast<long long>(N); ++n_tmp) {
             std::size_t n = static_cast<std::size_t>(n_tmp);
-            std::pair<std::size_t, float> min_k_dist = FindNearetCenterLinear(pydata[n], centers_old);
+            std::pair<std::size_t, float> min_k_dist = FindNearetCenterLinear(NthCode(pydata, n), centers_old);
             assignments_[n] = (int) min_k_dist.first;
             errors[n] = min_k_dist.second;
         }
@@ -161,21 +164,22 @@ float PQKMeans::L2SquaredDistance(const std::vector<float> &vec1,
     return dist;
 }
 
-void PQKMeans::InitializeCentersByRandomPicking(const std::vector<std::vector<unsigned char> > &codes,
-                                                  int K,
-                                                  std::vector<std::vector<unsigned char> > *centers)
+
+
+void PQKMeans::InitializeCentersByRandomPicking(const std::vector<unsigned char> &codes, int K, std::vector<std::vector<unsigned char> > *centers)
 {
     assert(centers != nullptr);
     centers->clear();
     centers->resize(K);
 
-    std::vector<int> ids(codes.size());
+    std::vector<int> ids(codes.size() / M_);
     std::iota(ids.begin(), ids.end(), 0); // 0, 1, 2, ..., codes.size()-1
     std::mt19937 random_engine(0);
     std::shuffle(ids.begin(), ids.end(), random_engine);
     for (std::size_t k = 0; k < (std::size_t) K; ++k) {
-        (*centers)[k] = codes[ids[k]];
+        (*centers)[k] = NthCode(codes, ids[k]);
     }
+
 }
 
 std::pair<std::size_t, float> PQKMeans::FindNearetCenterLinear(const std::vector<unsigned char> &query,
@@ -194,8 +198,8 @@ std::pair<std::size_t, float> PQKMeans::FindNearetCenterLinear(const std::vector
     return std::pair<std::size_t, float>((std::size_t) min_i, min_dist);
 }
 
-std::vector<unsigned char> PQKMeans::ComputeCenterBySparseVoting(const std::vector<std::vector<unsigned char> > &codes,
-                                                                   const std::vector<std::size_t> &selected_ids)
+
+std::vector<unsigned char> PQKMeans::ComputeCenterBySparseVoting(const std::vector<unsigned char> &codes, const std::vector<std::size_t> &selected_ids)
 {
     std::vector<unsigned char> average_code(M_);
     std::size_t Ks = codewords_[0].size();  // The number of codewords for each subspace
@@ -204,7 +208,7 @@ std::vector<unsigned char> PQKMeans::ComputeCenterBySparseVoting(const std::vect
         // Scan the assigned codes, then create a freq-histogram
         std::vector<int> frequency_histogram(Ks, 0);
         for (const auto &id : selected_ids) {
-            ++frequency_histogram[codes[id][m]];
+            ++frequency_histogram[ NthCodeMthElement(codes, id, m) ];
         }
 
         // Vote the freq-histo with weighted by ditance matrices
@@ -232,6 +236,16 @@ std::vector<unsigned char> PQKMeans::ComputeCenterBySparseVoting(const std::vect
         average_code[m] = (unsigned char) min_ks;
     }
     return average_code;
+}
+
+std::vector<unsigned char> PQKMeans::NthCode(const std::vector<unsigned char> &long_code, std::size_t n)
+{
+    return std::vector<unsigned char>(long_code.begin() + n * M_, long_code.begin() + (n + 1) * M_);
+}
+
+unsigned char PQKMeans::NthCodeMthElement(const std::vector<unsigned char> &long_code, std::size_t n, int m)
+{
+    return long_code[ n * M_ + m];
 }
 
 
