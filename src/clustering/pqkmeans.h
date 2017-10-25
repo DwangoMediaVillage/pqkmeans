@@ -12,20 +12,6 @@
 
 namespace pqkmeans {
 
-
-
-
-class UcharVecs {
-public:
-    UcharVecs() {init_ = false;}
-
-    bool init_;
-};
-
-
-
-
-
 class PQKMeans {
 public:
     PQKMeans(std::vector<std::vector<std::vector<float>>> codewords, int K, int itr, bool verbose);
@@ -44,7 +30,6 @@ private:
     int K_;
     int itr_;
     std::size_t M_; // the number of subspace
-    std::size_t N_; // The number of vectors to be clusted in fit
     bool verbose_;
 
     std::vector<std::vector<unsigned char>> centers_;  // centers for clustering.
