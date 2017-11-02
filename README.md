@@ -1,7 +1,7 @@
 # PQk-means
 
 [**Project**](http://yusukematsui.me/project/pqkmeans/pqkmeans.html)
-| [**Paper**](https://arxiv.org/abs/1709.03708)
+| [**Paper**](https://dl.acm.org/ft_gateway.cfm?id=3123430)
 | [**Tutorial**](./tutorial)
 
 
