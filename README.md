@@ -75,13 +75,13 @@ python setup.py test
 ```python
 import pqkmeans
 import numpy as np
-X = np.random.random((1000, 100)) # 100 dimensional 1000 samples
+X = np.random.random((100000, 128)) # 128 dimensional 100,000 samples
 
 # Train a PQ encoder.
 # Each vector is devided into 4 parts and each part is
 # encoded with log256 = 8 bit, resulting in a 32 bit PQ code.
 encoder = pqkmeans.encoder.PQEncoder(num_subdim=4, Ks=256)
-encoder.fit(X)
+encoder.fit(X[:1000])  # Use a subset of X for training
 
 # Convert input vectors to 32-bit PQ codes, where each PQ code consists of four uint8.
 # You can train the encoder and transform the input vectors to PQ codes preliminary.
@@ -102,11 +102,11 @@ In almost the same manner as for PQk-means,
 ```python
 import pqkmeans
 import numpy as np
-X = np.random.random((1000, 100)) # 100 dimensional 1000 samples
+X = np.random.random((100000, 128)) # 128 dimensional 100,000 samples
 
 # Train an ITQ binary encoder
 encoder = pqkmeans.encoder.ITQEncoder(num_bit=32)
-encoder.fit(X)
+encoder.fit(X[:1000])  # Use a subset of X for training
 
 # Convert input vectors to binary codes
 X_itq = encoder.transform(X)
