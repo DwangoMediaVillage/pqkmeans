@@ -20,7 +20,7 @@ PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int
     }
 
     if (initial_centers.size() > 0){
-        SetClusterCenters(init_centers)
+        SetClusterCenters(initial_centers);
     }
 
     // Compute distance-matrices among codewords
@@ -147,8 +147,8 @@ std::vector<std::vector<unsigned char>> PQKMeans::GetClusterCenters()
 
 void PQKMeans::SetClusterCenters(std::vector<std::vector<unsigned char>> centers_new)
 {
-    assert(centers_new.size() == K_)
-    centers_ = centers_new
+    assert(centers_new.size() == K_);
+    centers_ = centers_new;
 }
 
 
