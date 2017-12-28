@@ -25,6 +25,8 @@ public:
     std::vector<std::vector<unsigned char>> GetClusterCenters();
     int K() const { return K_; }
     int Iteration() const { return itr_; }
+    bool Verbose() const { return verbose_; }
+
 
 private:
     std::vector<std::vector<std::vector<float>>> codewords_;  // codewords for PQ encoding

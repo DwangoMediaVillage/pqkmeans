@@ -32,10 +32,10 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def("fit", &PQKMeans::fit)
             .def("predict_one", &PQKMeans::predict_one)
             .def("set_cluster_centers", &PQKMeans::SetClusterCenters)
+            .def_property_readonly("labels_", &PQKMeans::GetAssignments)
+            .def_property_readonly("cluster_centers_", &PQKMeans::GetClusterCenters)
             .def_property_readonly("iteration_", &PQKMeans::Iteration)
             .def_property_readonly("k_", &PQKMeans::K)
-            .def_property_readonly("labels_", &PQKMeans::GetAssignments)
-            .def_property_readonly("cluster_centers_", &PQKMeans::GetClusterCenters);
-
+            .def_property_readonly("verbose_", &PQKMeans::Verbose);
 }
 }  // namespace pqkmeans

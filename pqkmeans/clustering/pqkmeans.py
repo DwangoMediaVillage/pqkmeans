@@ -11,20 +11,17 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
         if init_centers is None:
             init_centers = []
         self.encoder = encoder
-        self.k = k
-        self.iteration = iteration
-        self.verbose = verbose
-        self._impl = _pqkmeans.PQKMeans(self.encoder.codewords, self.k, self.iteration, self.verbose, init_centers)
+        self._impl = _pqkmeans.PQKMeans(self.encoder.codewords, k, iteration, verbose, init_centers)
 
     def predict_generator(self, x_test):
-        #type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> Any
+        # type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> Any
         for vec in x_test:
             yield self._impl.predict_one(vec)
 
     def fit(self, x_train):
-        #type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> None
+        # type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> None
         assert len(x_train.shape) == 2
-        self._impl.fit(x_train.reshape(-1)) # Convert to a long 1D array
+        self._impl.fit(x_train.reshape(-1))  # Convert to a long 1D array
 
     def predict(self, x_test):
         # type: (numpy.array) -> Any
@@ -36,12 +33,13 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
             "encoder": self.encoder,
             "k": self._impl.k_,
             "iteration": self._impl.iteration_,
+            "verbose": self._impl.verbose_,
             "cluster_centers": self.cluster_centers_
         }
-        # return self.cluster_centers_
 
     def __setstate__(self, state):
-        self._impl = _pqkmeans.PQKMeans(state["encoder"].codewords, state["k"], state["iteration"], False, [])
+        self._impl = _pqkmeans.PQKMeans(state["encoder"].codewords, state["k"], state["iteration"], state["verbose"],
+                                        [])
         self._impl.set_cluster_centers(state["cluster_centers"])
 
     @property
@@ -51,4 +49,3 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
     @property
     def cluster_centers_(self):
         return self._impl.cluster_centers_
-
