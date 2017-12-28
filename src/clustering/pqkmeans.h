@@ -17,13 +17,14 @@ public:
     PQKMeans(std::vector<std::vector<std::vector<float>>> codewords, int K, int itr, bool verbose, std::vector<std::vector<unsigned char>> initial_centers);
 
     int predict_one(const std::vector<unsigned char> &pyvector);
-
     void fit(const std::vector<unsigned char> &pydata);  // pydata is a long array. pydata.size == N * M
 
     const std::vector<int> GetAssignments();
 
+    void SetClusterCenters(const std::vector<std::vector<unsigned char>> &centers_new);
     std::vector<std::vector<unsigned char>> GetClusterCenters();
-
+    int K() const { return K_; }
+    int Iteration() const { return itr_; }
 
 private:
     std::vector<std::vector<std::vector<float>>> codewords_;  // codewords for PQ encoding
@@ -45,7 +46,6 @@ private:
     float L2SquaredDistance(const std::vector<float> &vec1,
                             const std::vector<float> &vec2);
 
-    void SetClusterCenters(const std::vector<std::vector<unsigned char>> &centers_new);
     void InitializeCentersByRandomPicking(const std::vector<unsigned char> &codes,  // codes.size == N * M
                                           int K,
                                           std::vector<std::vector<unsigned char>> *centers_);

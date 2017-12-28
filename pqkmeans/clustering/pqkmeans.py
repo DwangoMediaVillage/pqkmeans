@@ -10,7 +10,11 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
         super(PQKMeans, self).__init__()
         if init_centers is None:
             init_centers = []
-        self._impl = _pqkmeans.PQKMeans(encoder.codewords, k, iteration, verbose, init_centers)
+        self.encoder = encoder
+        self.k = k
+        self.iteration = iteration
+        self.verbose = verbose
+        self._impl = _pqkmeans.PQKMeans(self.encoder.codewords, self.k, self.iteration, self.verbose, init_centers)
 
     def predict_generator(self, x_test):
         #type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> Any
@@ -26,6 +30,19 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
         # type: (numpy.array) -> Any
         assert len(x_test.shape) == 2
         return numpy.array(list(self.predict_generator(x_test)))
+
+    def __getstate__(self):
+        return {
+            "encoder": self.encoder,
+            "k": self._impl.k_,
+            "iteration": self._impl.iteration_,
+            "cluster_centers": self.cluster_centers_
+        }
+        # return self.cluster_centers_
+
+    def __setstate__(self, state):
+        self._impl = _pqkmeans.PQKMeans(state["encoder"].codewords, state["k"], state["iteration"], False, [])
+        self._impl.set_cluster_centers(state["cluster_centers"])
 
     @property
     def labels_(self):
