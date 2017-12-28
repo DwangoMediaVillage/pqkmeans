@@ -3,7 +3,7 @@
 namespace pqkmeans {
 
 
-PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int K, int itr, bool verbose)
+PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int K, int itr, bool verbose, std::vector<std::vector<unsigned char>> initial_centers)
     : codewords_(codewords), K_(K), itr_(itr), verbose_(verbose)
 {
     assert(!codewords.empty() && !codewords[0].empty() && !codewords[0][0].empty());
@@ -13,10 +13,15 @@ PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int
 
     if (256 < Ks) {
         std::cerr << "Error. Ks is too large. "
-                  << "Currently, we support PQ code with Ks <= 256 "
+                  << "Currently, we only support PQ code with Ks <= 256 "
                   << "so that each subspace is represented by unsigned char (8 bit)"
                   << std::endl;
         throw;
+    }
+
+    // In case of not using cluster center initialization, it gots empty vector.
+    if (initial_centers.size() > 0){
+        SetClusterCenters(initial_centers);
     }
 
     // Compute distance-matrices among codewords
@@ -140,6 +145,13 @@ std::vector<std::vector<unsigned char>> PQKMeans::GetClusterCenters()
 {
     return centers_;
 }
+
+void PQKMeans::SetClusterCenters(const std::vector<std::vector<unsigned char>> &centers_new)
+{
+    assert(centers_new.size() == K_);
+    centers_ = centers_new;
+}
+
 
 float PQKMeans::SymmetricDistance(const std::vector<unsigned char> &code1,
                                   const std::vector<unsigned char> &code2)

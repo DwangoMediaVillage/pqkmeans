@@ -6,9 +6,11 @@ import _pqkmeans
 
 
 class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
-    def __init__(self, encoder, k, iteration=10, verbose=False):
+    def __init__(self, encoder, k, iteration=10, verbose=False, init_centers=None):
         super(PQKMeans, self).__init__()
-        self._impl = _pqkmeans.PQKMeans(encoder.codewords, k, iteration, verbose)
+        if init_centers is None:
+            init_centers = []
+        self._impl = _pqkmeans.PQKMeans(encoder.codewords, k, iteration, verbose, init_centers)
 
     def predict_generator(self, x_test):
         #type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> Any
