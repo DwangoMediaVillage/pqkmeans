@@ -19,6 +19,7 @@ PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int
         throw;
     }
 
+    // In case of not using cluster center initialization, it gots empty vector.
     if (initial_centers.size() > 0){
         SetClusterCenters(initial_centers);
     }
@@ -145,7 +146,7 @@ std::vector<std::vector<unsigned char>> PQKMeans::GetClusterCenters()
     return centers_;
 }
 
-void PQKMeans::SetClusterCenters(std::vector<std::vector<unsigned char>> centers_new)
+void PQKMeans::SetClusterCenters(const std::vector<std::vector<unsigned char>> centers_new)
 {
     assert(centers_new.size() == K_);
     centers_ = centers_new;

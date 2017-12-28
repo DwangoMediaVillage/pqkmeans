@@ -53,18 +53,18 @@ class TestPQKMeans(unittest.TestCase):
                 numpy.linalg.norm(cluster_centers_decoded[other_cluster] - code_decoded)
             )
     def test_constructor_with_cluster_center(self):
-        # Run pqkmeans first. 
+        # Run pqkmeans first.
         engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=False)
         codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
         fit_predicted = engine.fit_predict(codes)
         cluster_centers = numpy.array(engine.cluster_centers_, dtype=numpy.uint8)
         predicted = engine.predict(codes)
 
-        # Create new pqkmeans, but construct with initial centers. 
-        engine_recovered = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=False, init_centers=cluster_centers)        
-        fit_predicted_from_recovered_obj = engine_recovered.predict(codes)        
+        # Create new pqkmeans, but construct with initial centers.
+        engine_recovered = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=False, init_centers=cluster_centers)
+        fit_predicted_from_recovered_obj = engine_recovered.predict(codes)
 
-        self.assertEqual(predicted.all(), fit_predicted_from_recovered_obj.all())
+        numpy.testing.assert_array_equal(predicted, fit_predicted_from_recovered_obj)
 
 
 
