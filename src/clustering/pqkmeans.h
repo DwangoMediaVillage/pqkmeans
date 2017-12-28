@@ -45,7 +45,7 @@ private:
     float L2SquaredDistance(const std::vector<float> &vec1,
                             const std::vector<float> &vec2);
 
-    void SetClusterCenters(std::vector<std::vector<unsigned char>> centers_new);
+    void SetClusterCenters(const std::vector<std::vector<unsigned char>> &centers_new);
     void InitializeCentersByRandomPicking(const std::vector<unsigned char> &codes,  // codes.size == N * M
                                           int K,
                                           std::vector<std::vector<unsigned char>> *centers_);

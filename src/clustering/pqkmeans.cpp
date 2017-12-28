@@ -146,7 +146,7 @@ std::vector<std::vector<unsigned char>> PQKMeans::GetClusterCenters()
     return centers_;
 }
 
-void PQKMeans::SetClusterCenters(const std::vector<std::vector<unsigned char>> centers_new)
+void PQKMeans::SetClusterCenters(const std::vector<std::vector<unsigned char>> &centers_new)
 {
     assert(centers_new.size() == K_);
     centers_ = centers_new;
