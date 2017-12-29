@@ -33,7 +33,7 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
         return PQKMeansSavedata(
             encoder=self.encoder,
             k=self._impl.k_,
-            iteration=self._impl.k_,
+            iteration=self._impl.iteration_,
             verbose=self._impl.verbose_,
             cluster_centers=self.cluster_centers_
         )
