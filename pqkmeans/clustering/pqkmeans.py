@@ -9,12 +9,10 @@ PQKMeansSavedata = collections.namedtuple('PQKMeansSavedata',
 
 
 class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
-    def __init__(self, encoder, k, iteration=10, verbose=False, init_centers=None):
+    def __init__(self, encoder, k, iteration=10, verbose=False):
         super(PQKMeans, self).__init__()
-        if init_centers is None:
-            init_centers = []
         self.encoder = encoder
-        self._impl = _pqkmeans.PQKMeans(self.encoder.codewords, k, iteration, verbose, init_centers)
+        self._impl = _pqkmeans.PQKMeans(self.encoder.codewords, k, iteration, verbose)
 
     def predict_generator(self, x_test):
         # type (typing.Iterable[typing.Iterable[numpy.uint8]]) -> Any
@@ -42,8 +40,7 @@ class PQKMeans(sklearn.base.BaseEstimator, sklearn.base.ClusterMixin):
 
     def __setstate__(self, state):
         # type: (PQKMeansSavedata) -> None
-        self._impl = _pqkmeans.PQKMeans(state.encoder.codewords, state.k, state.iteration, state.verbose,
-                                        [])
+        self._impl = _pqkmeans.PQKMeans(state.encoder.codewords, state.k, state.iteration, state.verbose)
         self._impl.set_cluster_centers(state.cluster_centers)
 
     @property

@@ -28,7 +28,7 @@ PYBIND11_MODULE(_pqkmeans, m) {
             .def_property_readonly("cluster_centers_", &BKMeans::GetClusterCenters);
 
     py::class_<PQKMeans>(m, "PQKMeans")
-            .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int, bool, std::vector<std::vector<unsigned char>>>())
+            .def(py::init< std::vector<std::vector<std::vector<float>>>, int, int, bool > ())
             .def("fit", &PQKMeans::fit)
             .def("predict_one", &PQKMeans::predict_one)
             .def("set_cluster_centers", &PQKMeans::SetClusterCenters)
