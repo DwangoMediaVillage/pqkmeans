@@ -2,6 +2,8 @@ import unittest
 import pqkmeans
 import numpy
 import collections
+import pickle
+
 
 class TestPQKMeans(unittest.TestCase):
     def data_source(self, n: int):
@@ -32,7 +34,6 @@ class TestPQKMeans(unittest.TestCase):
         b = engine.predict(codes[0:1, :])
         self.assertEqual(a, b)
 
-
     def test_cluster_centers_are_really_nearest(self):
         engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=2, iteration=10, verbose=False)
         codes = self.encoder.transform(numpy.array(list(self.data_source(100))))
@@ -52,6 +53,7 @@ class TestPQKMeans(unittest.TestCase):
                 numpy.linalg.norm(cluster_centers_decoded[cluster] - code_decoded),
                 numpy.linalg.norm(cluster_centers_decoded[other_cluster] - code_decoded)
             )
+
     def test_constructor_with_cluster_center(self):
         # Run pqkmeans first.
         engine = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=False)
@@ -60,11 +62,10 @@ class TestPQKMeans(unittest.TestCase):
         cluster_centers = numpy.array(engine.cluster_centers_, dtype=numpy.uint8)
         predicted = engine.predict(codes)
 
-        # Create new pqkmeans, but construct with initial centers.
-        engine_recovered = pqkmeans.clustering.PQKMeans(encoder=self.encoder, k=5, iteration=10, verbose=False, init_centers=cluster_centers)
+
+        # save current engine and recover from savedata
+        engine_savedata = pickle.dumps(engine)
+        engine_recovered = pickle.loads(engine_savedata)
         fit_predicted_from_recovered_obj = engine_recovered.predict(codes)
 
         numpy.testing.assert_array_equal(predicted, fit_predicted_from_recovered_obj)
-
-
-

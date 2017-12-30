@@ -3,8 +3,8 @@
 namespace pqkmeans {
 
 
-PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int K, int itr, bool verbose, std::vector<std::vector<unsigned char>> initial_centers)
-    : codewords_(codewords), K_(K), itr_(itr), verbose_(verbose)
+PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int K, int itr, bool verbose)
+    : codewords_(codewords), K_(K), iteration_(itr), verbose_(verbose)
 {
     assert(!codewords.empty() && !codewords[0].empty() && !codewords[0][0].empty());
     M_ = codewords.size(); // The number of subspace
@@ -17,11 +17,6 @@ PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int
                   << "so that each subspace is represented by unsigned char (8 bit)"
                   << std::endl;
         throw;
-    }
-
-    // In case of not using cluster center initialization, it gots empty vector.
-    if (initial_centers.size() > 0){
-        SetClusterCenters(initial_centers);
     }
 
     // Compute distance-matrices among codewords
@@ -75,9 +70,9 @@ void PQKMeans::fit(const std::vector<unsigned char> &pydata) {
 
     std::vector<double> errors(N, 0);
 
-    for (int itr = 0; itr < itr_; ++itr) {
+    for (int itr = 0; itr < iteration_; ++itr) {
         if (verbose_) {
-            std::cout << "Iteration start: " << itr << " / " << itr_ << std::endl;
+            std::cout << "Iteration start: " << itr << " / " << iteration_ << std::endl;
         }
         auto start = std::chrono::system_clock::now(); // ---- timer start ---
 
@@ -111,7 +106,7 @@ void PQKMeans::fit(const std::vector<unsigned char> &pydata) {
         }
 
         // (3) Compute centers
-        if (itr != itr_ - 1) {
+        if (itr != iteration_ - 1) {
             // Usually, centers would be updated.
             // After the last assignment, centers should not be updated, so this block is skiped.
 
