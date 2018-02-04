@@ -94,6 +94,21 @@ clustered = kmeans.fit_predict(X_pqcode)
 # Then, clustered[0] is the id of assigned center for the first input PQ code (X_pqcode[0]).
 ```
 
+Note that an instance of PQ-encoder (`encoder`) and an instance of clustering (`kmeans`) can be pickled and reused later.
+
+```python
+import pickle
+
+# An instance of PQ-encoder.
+pickle.dump(encoder, open('encoder.pkl', 'wb'))
+encoder_dumped = pickle.load(open('encoder.pkl', 'rb'))
+
+# An instance of clustering. This can be reused as a vector quantizer later.
+pickle.dump(kmeans, open('kmeans.pkl', 'wb'))
+kmeans_dumped = pickle.load(open('kmeans.pkl', 'rb'))
+```
+
+
 
 #### For Bk-means
 
