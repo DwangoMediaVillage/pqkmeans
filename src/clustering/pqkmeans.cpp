@@ -192,18 +192,31 @@ void PQKMeans::InitializeCentersByRandomPicking(const std::vector<unsigned char>
 std::pair<std::size_t, float> PQKMeans::FindNearetCenterLinear(const std::vector<unsigned char> &query,
                                                                const std::vector<std::vector<unsigned char> > &codes)
 {
-    int min_i = -1;
+    std::vector<float> dists(codes.size());
+
+    // Compute a distance from a query to each code in parallel
+    long long sz = static_cast<long long>(codes.size());
+#pragma omp parallel for
+    for (long long i_tmp = 0; i_tmp < sz; ++i_tmp) {
+        std::size_t i = static_cast<std::size_t>(i_tmp);
+        dists[i] = SymmetricDistance(query, codes[i]);
+    }
+
+    // Just pick up the closest one
     float min_dist = FLT_MAX;
-    for (std::size_t i = 0, sz = codes.size(); i < sz; ++i) {
-        float dist = SymmetricDistance(query, codes[i]);
-        if (dist < min_dist) {
+    int min_i = -1;
+    for (size_t i = 0, sz = codes.size(); i < sz; ++i) {
+        if (dists[i] < min_dist) {
             min_i = i;
-            min_dist = dist;
+            min_dist = dists[i];
         }
     }
     assert(min_i != -1);
+
     return std::pair<std::size_t, float>((std::size_t) min_i, min_dist);
 }
+
+
 
 
 std::vector<unsigned char> PQKMeans::ComputeCenterBySparseVoting(const std::vector<unsigned char> &codes, const std::vector<std::size_t> &selected_ids)
