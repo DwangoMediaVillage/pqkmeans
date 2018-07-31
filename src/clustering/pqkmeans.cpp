@@ -3,13 +3,14 @@
 namespace pqkmeans {
 
 
+  
+
 PQKMeans::PQKMeans(std::vector<std::vector<std::vector<float> > > codewords, int K, int itr, bool verbose)
     : codewords_(codewords), K_(K), iteration_(itr), verbose_(verbose)
 {
     assert(!codewords.empty() && !codewords[0].empty() && !codewords[0][0].empty());
     M_ = codewords.size(); // The number of subspace
     std::size_t Ks = codewords[0].size();  // The number of codewords for each subspace
-    assert(Ks == codewords[0][0].size());
 
     if (256 < Ks) {
         std::cerr << "Error. Ks is too large. "
@@ -143,7 +144,7 @@ std::vector<std::vector<unsigned char>> PQKMeans::GetClusterCenters()
 
 void PQKMeans::SetClusterCenters(const std::vector<std::vector<unsigned char>> &centers_new)
 {
-    assert(centers_new.size() == K_);
+    assert(centers_new.size() == (size_t) K_);
     centers_ = centers_new;
 }
 
