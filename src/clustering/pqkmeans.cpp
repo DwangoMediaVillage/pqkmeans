@@ -43,7 +43,7 @@ int PQKMeans::predict_one(const std::vector<unsigned char> &pyvector)
 
 
 void PQKMeans::fit(const std::vector<unsigned char> &pydata) {
-    assert( (size_t) K_ * M_ < pydata.size());
+    assert( (size_t) K_ * M_ <= pydata.size());
     assert(pydata.size() % M_ == 0);
     std::size_t N = pydata.size() / M_;
 
