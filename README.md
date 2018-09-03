@@ -56,7 +56,7 @@ python setup.py install
 
 
 ```
-# with aritficial data
+# with artificial data
 python bin/run_experiment.py --dataset artificial --algorithm bkmeans pqkmeans --k 100
 # with texmex dataset (http://corpus-texmex.irisa.fr/)
 python bin/run_experiment.py --dataset siftsmall --algorithm bkmeans pqkmeans --k 100
@@ -78,7 +78,7 @@ import numpy as np
 X = np.random.random((100000, 128)) # 128 dimensional 100,000 samples
 
 # Train a PQ encoder.
-# Each vector is devided into 4 parts and each part is
+# Each vector is divided into 4 parts and each part is
 # encoded with log256 = 8 bit, resulting in a 32 bit PQ code.
 encoder = pqkmeans.encoder.PQEncoder(num_subdim=4, Ks=256)
 encoder.fit(X[:1000])  # Use a subset of X for training
