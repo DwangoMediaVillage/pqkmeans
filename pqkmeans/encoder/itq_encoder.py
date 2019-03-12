@@ -40,8 +40,8 @@ class ITQEncoder(EncoderBase):
 
         for i in range(iteration):
             ## projection step
-            logging.debug("R:", R.shape)
-            logging.debug("V:", V.shape)
+            logging.debug("R: {}".format(R.shape))
+            logging.debug("V: {}".format(V.shape))
             VR = V.dot(R)
 
             ## binary assignment
