@@ -1,8 +1,5 @@
 name: Publish
 
-#on:
-#  push:
-#    tags: '*'
 on:
   push:
     branches: [ master ]
@@ -27,6 +24,7 @@ jobs:
         pip install wheel
         python setup.py sdist
     - name: Publish distribution 📦 to PyPI
+      continue-on-error: true
       uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__
