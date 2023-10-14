@@ -3,7 +3,10 @@ import numpy
 import os
 import six.moves.urllib
 import tarfile
-import texmex_python
+try:
+    import texmex_python
+except ImportError:
+    pass
 
 
 def get_gmm_random_dataset(k, dimension=100, test_size=5000, train_size=500):
