@@ -1,4 +1,4 @@
-numpy
+numpy<1.21
 scikit-learn
 pipe<2.0
 scipy
