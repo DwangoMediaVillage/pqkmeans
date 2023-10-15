@@ -56,6 +56,8 @@ python setup.py install
 
 
 ```
+# evaluation needs extra texmex package
+pip install pqkmeans[texmex]
 # with artificial data
 python bin/run_experiment.py --dataset artificial --algorithm bkmeans pqkmeans --k 100
 # with texmex dataset (http://corpus-texmex.irisa.fr/)

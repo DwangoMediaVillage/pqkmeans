@@ -92,4 +92,7 @@ The library is written in C++ for the main algorithm with wrappers for Python. A
     cmdclass=dict(build_ext=CMakeBuild),
     test_suite='test',
     zip_safe=False,
+    extras_require={
+        "texmex": ["texmex-python>=1.0.0"],
+    },
 )

@@ -1,6 +1,5 @@
-numpy
+numpy<1.21
 scikit-learn
-pipe
+pipe<2.0
 scipy
 six
-texmex_python==1.0.0

@@ -3,7 +3,6 @@ import numpy
 import os
 import six.moves.urllib
 import tarfile
-import texmex_python
 
 
 def get_gmm_random_dataset(k, dimension=100, test_size=5000, train_size=500):
@@ -39,6 +38,10 @@ def get_sift1m_dataset(cache_directory="."):
 
 
 def get_texmex_dataset(url, filename, member_names, cache_directory="."):
+    try:
+        import texmex_python
+    except ImportError:
+        raise ImportError("Missing optional dependency 'texmex_python'. You must install it to use this dataset.")
     path = os.path.join(cache_directory, filename)
     if not os.path.exists(path):
         print("downloading {}".format(url))
