@@ -10,6 +10,7 @@ jobs:
   tests:
     runs-on: ${{ matrix.platform }}
     strategy:
+      fail-fast: false # would like to see which version fails
       max-parallel: 3
       matrix:
         platform: [ubuntu-latest]
