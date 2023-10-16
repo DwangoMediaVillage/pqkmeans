@@ -22,9 +22,9 @@ class PQEncoder(EncoderBase):
         self.Ds = int(D / self.M)
         assert self.trained_encoder is None, "fit must be called only once"
 
-        codewords = numpy.zeros((self.M, self.Ks, self.Ds), dtype=numpy.float)
+        codewords = numpy.zeros((self.M, self.Ks, self.Ds), dtype=float)
         for m in range(self.M):
-            x_train_sub = x_train[:, m * self.Ds: (m + 1) * self.Ds].astype(numpy.float)
+            x_train_sub = x_train[:, m * self.Ds: (m + 1) * self.Ds].astype(float)
             codewords[m], _ = kmeans2(x_train_sub, self.Ks, iter=self.iteration, minit='points')
         self.trained_encoder = TrainedPQEncoder(codewords, self.code_dtype)
 
@@ -66,7 +66,7 @@ class TrainedPQEncoder(object):
         assert M == self.M
         assert codes.dtype == self.code_dtype
         
-        decoded = numpy.empty((N, self.Ds * self.M), dtype=numpy.float)
+        decoded = numpy.empty((N, self.Ds * self.M), dtype=float)
         for m in range(self.M):
             decoded[:, m * self.Ds: (m + 1) * self.Ds] = self.codewords[m][codes[:, m], :]
         return decoded
